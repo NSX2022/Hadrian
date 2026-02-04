@@ -1,0 +1,5 @@
+{
+  "COMMENT (delete later)": "Port = which port should be listening for incoming messages, difficulty = how many",
+  "port": 35940,
+  "difficulty": 20
+}

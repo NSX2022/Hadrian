@@ -14,8 +14,8 @@ public class Primes {
     /**
      * Returns two large prime numbers that are {@code digits} number of digits long
      *
-     * @param digits number representing the length of each large prime number
-     * @return an array containing only two large prime numbers
+     * @param digits Number representing the length of each large prime number
+     * @return An array containing only two large prime numbers
      */
     public static long[] generatePrimes(long digits) {
         // Naive implementation
@@ -37,8 +37,8 @@ public class Primes {
     /**
      * Return the two private prime factors of the large public number
      *
-     * @param pubNum a very large non-prime number, that is the product of two prime numbers
-     * @return two prime numbers that produce {@code pubNum}
+     * @param pubNum A very large non-prime number, that is the product of two prime numbers
+     * @return Two prime numbers that produce {@code pubNum}
      */
     public static long[] calcRoots(long pubNum) {
         long[] toRet = { 4, 4 };  // initialize both numbers as the first non-prime numbers, to fail isPrime() check
@@ -81,9 +81,9 @@ public class Primes {
      * Uses BigDecimal to represent largest and smallest possible values,
      * then maps it to the given range as a BigInteger object.
      *
-     * @param rangeStart a large BigInteger value, the smallest possible return value
-     * @param rangeEnd   a large BigInteger value, the largest possible return value
-     * @return a random BigInteger value, between {@code rangeStart} and {@code rangeEnd} (both inclusive)
+     * @param rangeStart A large BigInteger value, the smallest possible return value
+     * @param rangeEnd   A large BigInteger value, the largest possible return value
+     * @return A random BigInteger value, between {@code rangeStart} and {@code rangeEnd} (both inclusive)
      * @see <a href="https://stackoverflow.com/a/70607245">StackOverflow post by Panibo (2026-02-03, License - CC BY-SA 4.0)</a>
      * @see BigInteger
      * @see BigDecimal
