@@ -10,83 +10,112 @@ import java.security.SecureRandom;
 */
 public class Primes {
     //TODO Use BigInteger for truly massive public keys
-
-    /// Returns two large prime numbers that are 'digits' long
-    public static long[] getPrimes(long digits) {
-        //Naive implementation
-        SecureRandom secrand = new SecureRandom();
-
-        //initialize both numbers to return as nonprimes with 'digits' digits
-        long[] toRet = {(long) (4 * Math.pow(10, digits)), (long) (4 * Math.pow(10, digits))};
-        while(!isPrime(toRet[0])){
-            toRet[0] = secrand.nextLong((long) (1 * Math.pow(10, digits)), (long) (9 * Math.pow(10, digits)));
-        }
-        while(!isPrime(toRet[1])){
-            toRet[1] = secrand.nextLong((long) (1 * Math.pow(10, digits)), (long) (9 * Math.pow(10, digits)));
-        }
-
+    
+    /**
+     * Returns two large prime numbers that are {@code digits} number of digits long
+     *
+     * @param digits number representing the length of each large prime number
+     * @return an array containing only two large prime numbers
+     */
+    public static long[] generatePrimes(long digits) {
+        // Naive implementation
+        SecureRandom secRand = new SecureRandom();
+        
+        long[] toRet = { 4, 4 };  // initialize both numbers as the first non-prime numbers, to fail isPrime() check
+        
+        long digitMin = (long) Math.pow(10, digits), digitMax = 9 * digitMin;
+        
+        while (!isPrime(toRet[0]))
+            toRet[0] = secRand.nextLong(digitMin, digitMax);
+        
+        while (!isPrime(toRet[1]))
+            toRet[1] = secRand.nextLong(digitMin, digitMax);
+        
         return toRet;
     }
-
-    /// Return the prime roots of a large number
+    
+    /**
+     * Return the two private prime factors of the large public number
+     *
+     * @param pubNum a very large non-prime number, that is the product of two prime numbers
+     * @return two prime numbers that produce {@code pubNum}
+     */
     public static long[] calcRoots(long pubNum) {
-        long[] toRet = {4,4};
-
+        long[] toRet = { 4, 4 };  // initialize both numbers as the first non-prime numbers, to fail isPrime() check
+        
         long digits = (long) Math.floor(Math.log10(Math.abs(pubNum))) + 1;
-        SecureRandom secrand = new SecureRandom();
-
-        while(!((toRet[0] * toRet[1]) == pubNum)){
-            while(!isPrime(toRet[0])){
-                toRet[0] = secrand.nextLong((long) (1 * Math.pow(10, digits)), (long) (9 * Math.pow(10, digits)));
-            }
-            while(!isPrime(toRet[1])){
-                toRet[1] = secrand.nextLong((long) (1 * Math.pow(10, digits)), (long) (9 * Math.pow(10, digits)));
-            }
+        SecureRandom secRand = new SecureRandom();
+        
+        while (toRet[0] * toRet[1] != pubNum) {
+            long digitMin = (long) Math.pow(10, digits), digitMax = 9 * digitMin;
+            
+            while (!isPrime(toRet[0]))
+                toRet[0] = secRand.nextLong(digitMin, digitMax);
+            
+            while (!isPrime(toRet[1]))
+                toRet[1] = secRand.nextLong(digitMin, digitMax);
         }
-
+        
         return toRet;
     }
-
-
-    public static boolean isPrime(long number){
-        int i = 2;
-        while(i <= (number/i)){
-            if(number % i == 0){
-                break;
-            }
-            i += 1;
+    
+    
+    /**
+     * Check if {@code number} parameter is a prime number
+     *
+     * @param number large number to prime check
+     * @return true if {@code number} is a prime number, false otherwise
+     */
+    public static boolean isPrime(long number) {
+        for (int i = 2; i <= number / i; i++) {
+            if (number % i == 0)
+                return false;
         }
-        return i > (number/i);
+        
+        return true;
     }
-
-    // A surprise tool that will help us later
-    // Source - https://stackoverflow.com/a/70607245
-    // Posted by Panibo
-    // Retrieved 2026-02-03, License - CC BY-SA 4.0
-    private static BigInteger RandomBigInteger(BigInteger rangeStart, BigInteger rangeEnd){
-
-        SecureRandom rand = new SecureRandom();
+    
+    /**
+     * Generate an extremely large integer between the given start and end values, as a BigInteger object.
+     * <p>
+     * Uses BigDecimal to represent largest and smallest possible values,
+     * then maps it to the given range as a BigInteger object.
+     *
+     * @param rangeStart a large BigInteger value, the smallest possible return value
+     * @param rangeEnd   a large BigInteger value, the largest possible return value
+     * @return a random BigInteger value, between {@code rangeStart} and {@code rangeEnd} (both inclusive)
+     * @see <a href="https://stackoverflow.com/a/70607245">StackOverflow post by Panibo (2026-02-03, License - CC BY-SA 4.0)</a>
+     * @see BigInteger
+     * @see BigDecimal
+     */
+    private static BigInteger RandomBigInteger(BigInteger rangeStart, BigInteger rangeEnd) {
+        SecureRandom secRand = new SecureRandom();
+        
         int scale = rangeEnd.toString().length();
-        String generated = "";
-        for(int i = 0; i < rangeEnd.toString().length(); i++){
-            generated += rand.nextInt(10);
-        }
-        BigDecimal inputRangeStart = new BigDecimal("0").setScale(scale, RoundingMode.FLOOR);
-        BigDecimal inputRangeEnd = new BigDecimal(String.format("%0" + (rangeEnd.toString().length()) +  "d", 0).replace('0', '9')).setScale(scale, RoundingMode.FLOOR);
-        BigDecimal outputRangeStart = new BigDecimal(rangeStart).setScale(scale, RoundingMode.FLOOR);
-        BigDecimal outputRangeEnd = new BigDecimal(rangeEnd).add(new BigDecimal("1")).setScale(scale, RoundingMode.FLOOR); //Adds one to the output range to correct rounding
-
-        //Calculates: (generated - inputRangeStart) / (inputRangeEnd - inputRangeStart) * (outputRangeEnd - outputRangeStart) + outputRangeStart
-        BigDecimal bd1 = new BigDecimal(new BigInteger(generated)).setScale(scale, RoundingMode.FLOOR).subtract(inputRangeStart);
-        BigDecimal bd2 = inputRangeEnd.subtract(inputRangeStart);
-        BigDecimal bd3 = bd1.divide(bd2, RoundingMode.FLOOR);
-        BigDecimal bd4 = outputRangeEnd.subtract(outputRangeStart);
-        BigDecimal bd5 = bd3.multiply(bd4);
-        BigDecimal bd6 = bd5.add(outputRangeStart);
-
+        
+        StringBuilder generated = new StringBuilder();
+        for (int i = 0; i < scale; i++)
+            generated.append(secRand.nextInt(10));
+        
+        BigDecimal inputRangeStart = new BigDecimal("0").setScale(scale, RoundingMode.FLOOR),
+                inputRangeEnd = new BigDecimal(String.format("%0" + (scale) + "d", 0)
+                                                     .replace('0', '9')).setScale(scale, RoundingMode.FLOOR),
+                outputRangeStart = new BigDecimal(rangeStart).setScale(scale, RoundingMode.FLOOR),
+                // Adds 1 to the output range to correct rounding
+                outputRangeEnd = new BigDecimal(rangeEnd).add(new BigDecimal("1"))
+                                                         .setScale(scale, RoundingMode.FLOOR),
+                
+                // Calculates: (generated - inputRangeStart) / (inputRangeEnd - inputRangeStart) * (outputRangeEnd - outputRangeStart) + outputRangeStart
+                bd1 = new BigDecimal(new BigInteger(generated.toString())).setScale(scale, RoundingMode.FLOOR)
+                                                                          .subtract(inputRangeStart),
+                bd2 = inputRangeEnd.subtract(inputRangeStart),
+                bd3 = bd1.divide(bd2, RoundingMode.FLOOR),
+                bd4 = outputRangeEnd.subtract(outputRangeStart),
+                bd5 = bd3.multiply(bd4),
+                bd6 = bd5.add(outputRangeStart);
+        
         BigInteger returnInteger = bd6.setScale(0, RoundingMode.FLOOR).toBigInteger();
-        returnInteger = (returnInteger.compareTo(rangeEnd) > 0 ? rangeEnd : returnInteger); //Converts number to the end of output range if it's over it. This is to correct rounding.
-        return returnInteger;
+        // Converts number to the end of output range if it's over it. This is to correct rounding.
+        return returnInteger.compareTo(rangeEnd) > 0 ? rangeEnd : returnInteger;
     }
-
 }
