@@ -1,5 +1,10 @@
 {
-  "COMMENT (delete later)": "Port = which port should be listening for incoming messages, difficulty = how many",
+  "COMMENT (delete later)": "Port = which port should be listening for incoming messages",
   "port": 35940,
-  "difficulty": 20
+  "ip_blacklist": [
+
+  ],
+  "MAC_blacklist": [
+
+  ]
 }

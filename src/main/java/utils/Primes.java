@@ -10,6 +10,7 @@ import java.security.SecureRandom;
 */
 public class Primes {
     //TODO Use BigInteger for truly massive public keys
+    //See Obsidian notes for my thoughts on how we should handle public key size
     
     /**
      * Returns two large prime numbers that are {@code digits} number of digits long
