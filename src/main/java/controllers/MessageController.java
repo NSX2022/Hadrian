@@ -2,10 +2,13 @@ package controllers;
 
 import jexer.TWindow;
 import jexer.backend.Screen;
+import models.Screens;
+
+import java.io.UnsupportedEncodingException;
 
 public class MessageController extends AbstractController {
     public MessageController(TWindow root) {
-        super(root);
+        super(root, Screens.MESSAGE);
     }
     
     @Override

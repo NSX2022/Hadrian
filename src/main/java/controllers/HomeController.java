@@ -11,7 +11,7 @@ public class HomeController extends AbstractController {
     private TText logArea;
     
     public HomeController(TWindow root) {
-        super(root);
+        super(root, Screens.HOME);
     }
     
     @Override
