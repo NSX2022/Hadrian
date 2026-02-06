@@ -1,5 +1,13 @@
 import jexer.*;
+import networking.Receiver;
 
 public class Main {
-    //TODO launch the server
+    //TODO
+
+    //Global
+    Receiver local_server;
+
+    public static void Main(String[] args){
+
+    }
 }

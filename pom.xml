@@ -8,10 +8,18 @@
     <artifactId>Hadrian</artifactId>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
+
         <dependency>
             <groupId>io.gitlab.autumnmeowmeow</groupId>
             <artifactId>jexer</artifactId>
             <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20251224</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

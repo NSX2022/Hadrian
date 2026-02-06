@@ -1,6 +1,5 @@
 {
-  "COMMENT (delete later)": "Port = which port should be listening for incoming messages",
-  "port": 35940,
+  "port": 9090,
   "ip_blacklist": [
 
   ],
