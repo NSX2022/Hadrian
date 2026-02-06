@@ -6,19 +6,87 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * Loads and stores specific JSON values from config.json
+ */
 public class Config {
     /*
-       TODO Load config.json values for the server + TUI
+       Load config.json values for the server + TUI
     */
+
+    //Default port number
     private int port = 9090;
+    private String[] ip_blacklist;
+    private String[] mac_blacklist;
+    private String[] ip_whitelist;
+    private String[] mac_whitelist;
+    //Whether or not to display the IP address in the TUI
+    private boolean hide_ip = true;
 
     public Config(){
         //TODO Create default values if the file does not exist
     }
     public void read_config() throws FileNotFoundException {
-        String Json = new Scanner(new File("config.json")).useDelimiter("\\Z").next();
-        JSONObject Jsonobject = new JSONObject(Json);
+        String json = new Scanner(new File("src/main/resources/config.json")).useDelimiter("\\Z").next();
+        JSONObject json_object = new JSONObject(json);
+        port = json_object.getInt("port");
 
+        ip_blacklist = json_object.getJSONArray("ip_blacklist")
+                .toList()
+                .stream()
+                .map(Object::toString)
+                .toArray(String[]::new);
+
+        mac_blacklist = json_object.getJSONArray("mac_blacklist")
+                .toList()
+                .stream()
+                .map(Object::toString)
+                .toArray(String[]::new);
+
+        ip_whitelist = json_object.getJSONArray("ip_whitelist")
+                .toList()
+                .stream()
+                .map(Object::toString)
+                .toArray(String[]::new);
+
+        mac_whitelist = json_object.getJSONArray("mac_whitelist")
+                .toList()
+                .stream()
+                .map(Object::toString)
+                .toArray(String[]::new);
+
+        hide_ip = json_object.getBoolean("hide_ip");
     }
 
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String[] getMac_blacklist() {
+        return mac_blacklist;
+    }
+
+    public String[] getIp_blacklist() {
+        return ip_blacklist;
+    }
+
+    public String[] getIp_whitelist() {
+        return ip_whitelist;
+    }
+
+    public String[] getMac_whitelist() {
+        return mac_whitelist;
+    }
+
+    public boolean getHide_ip() {
+        return hide_ip;
+    }
+
+    public void setHide_ip(boolean hide_ip) {
+        this.hide_ip = hide_ip;
+    }
 }
