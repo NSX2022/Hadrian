@@ -1,6 +1,7 @@
 package app;
 
 import controllers.AbstractController;
+import controllers.HelpController;
 import controllers.HomeController;
 import controllers.MessageController;
 import jexer.TApplication;
@@ -40,6 +41,7 @@ public class App extends TApplication {
         AbstractController controller = switch (toScreen) {
             case HOME -> new HomeController(root);
             case MESSAGE -> new MessageController(root);
+            case HELP -> new HelpController(root);
             // TODO add more cases with other pages
             default -> throw new IllegalArgumentException("Unknown screen type:" + toScreen);
         };

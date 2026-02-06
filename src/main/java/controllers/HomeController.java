@@ -56,13 +56,7 @@ public class HomeController extends AbstractController {
                     @Override
                     public void DO() {
                         log("Message Button Selected");
-                        
-                        try {
-                            App.changeScreen(HomeController.this, Screens.MESSAGE);
-                        } catch (UnsupportedEncodingException e) {
-                            throw new RuntimeException(e);
-                        }
-                        
+                        changeScreen(Screens.MESSAGE);
                         log("Switched To Message Screen");
                     }
                 }
@@ -76,7 +70,8 @@ public class HomeController extends AbstractController {
                     @Override
                     public void DO() {
                         log("Help Button Selected");
-                        // TODO help functionality
+                        changeScreen(Screens.HELP);
+                        log("Switched To Help Screen");
                     }
                 }
         );
@@ -93,6 +88,14 @@ public class HomeController extends AbstractController {
                     }
                 }
         );
+    }
+    
+    private void changeScreen(Screens screen) {
+        try {
+            App.changeScreen(HomeController.this, screen);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     private void log(String message) {
