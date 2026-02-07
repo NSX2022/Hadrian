@@ -52,14 +52,14 @@ public class HomeController extends AbstractController {
         
         new TButton(
                 root,
-                "> Message",
+                "> Messages",
                 menuX, menuY + 4,
                 new TAction() {
                     @Override
                     public void DO() {
-                        log("Message Button Selected");
-                        changeScreen(Screens.MESSAGE);
-                        log("Switched To Message Screen");
+                        log("Messages Button Selected");
+                        changeScreen(Screens.MESSAGES);
+                        log("Switched To Messages Screen");
                     }
                 }
         );
@@ -80,7 +80,7 @@ public class HomeController extends AbstractController {
         
         new TButton(
                 root,
-                "> Exit",
+                "< Exit",
                 menuX, menuY + 12,
                 new TAction() {
                     @Override
