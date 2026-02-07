@@ -1,5 +1,6 @@
 package app;
 
+import config.Config;
 import controllers.AbstractController;
 import controllers.HelpController;
 import controllers.HomeController;
@@ -8,6 +9,7 @@ import jexer.TApplication;
 import jexer.TWindow;
 import models.Screens;
 
+import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
 public class App extends TApplication {
@@ -27,6 +29,13 @@ public class App extends TApplication {
     }
     
     public static void main(String[] args) throws UnsupportedEncodingException {
+        Config conf = new Config();
+        try {
+            conf.read_config();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.exit(401);
+        }
         new App().run();
     }
     

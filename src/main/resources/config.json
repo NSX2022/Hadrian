@@ -2,6 +2,7 @@
   "port": 9090,
   "hide_ip": true,
   "max_bytes_per_message": 1024,
+  "username": "Anon",
   "ip_blacklist": [
 
   ],

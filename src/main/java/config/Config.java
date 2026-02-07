@@ -22,10 +22,13 @@ public class Config {
     private String[] mac_whitelist;
     //Whether or not to display the IP address in the TUI
     private boolean hide_ip = true;
+    private int max_bytes_per_message = 1024;
+    private String username = "Anon";
 
     public Config(){
         //TODO Create default values if the file does not exist
     }
+
     public void read_config() throws FileNotFoundException {
         String json = new Scanner(new File("src/main/resources/config.json")).useDelimiter("\\Z").next();
         JSONObject json_object = new JSONObject(json);
@@ -56,6 +59,10 @@ public class Config {
                 .toArray(String[]::new);
 
         hide_ip = json_object.getBoolean("hide_ip");
+
+        max_bytes_per_message = json_object.getInt("max_bytes_per_message");
+
+        username = json_object.getString("username");
     }
 
     public int getPort() {
@@ -88,5 +95,13 @@ public class Config {
 
     public void setHide_ip(boolean hide_ip) {
         this.hide_ip = hide_ip;
+    }
+
+    public int getMax_bytes_per_message() {
+        return max_bytes_per_message;
+    }
+
+    public void setMax_bytes_per_message(int max_bytes_per_message) {
+        this.max_bytes_per_message = max_bytes_per_message;
     }
 }
