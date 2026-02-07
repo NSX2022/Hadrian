@@ -30,6 +30,7 @@ public class SocketTest {
         InetAddress toSend;
         //Press ENTER when ready to send
         Scanner wait = new Scanner(System.in);
+
         try {
             //Replace with my IP address
             toSend = InetAddress.getByName("172.27.244.157");
@@ -37,6 +38,7 @@ public class SocketTest {
             throw new RuntimeException(e);
         }
 
-        sender.sendMessage("SAVE THE CHICKENS", toSend);
+        sender.sendMessage(wait.next(), toSend);
+        System.out.println("SENT MESSAGE");
     }
 }
