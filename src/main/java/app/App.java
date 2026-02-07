@@ -8,9 +8,11 @@ import controllers.MessageController;
 import jexer.TApplication;
 import jexer.TWindow;
 import models.Screens;
+import utils.Logging;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
 
 public class App extends TApplication {
     private static TWindow root;
@@ -41,7 +43,7 @@ public class App extends TApplication {
     
     public static void changeScreen(AbstractController current, Screens toScreen) throws UnsupportedEncodingException {
         if (current.screen == toScreen) {
-            //log("Already on page: " + current.screen.name());
+            Logging.log("Already on page: " + current.screen.name(), Level.INFO);
             return;
         }
         

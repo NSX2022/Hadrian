@@ -3,8 +3,10 @@ package controllers;
 import jexer.TWindow;
 import jexer.backend.Screen;
 import models.Screens;
+import utils.Logging;
 
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
 
 public class MessageController extends AbstractController {
     public MessageController(TWindow root) {

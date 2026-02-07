@@ -4,8 +4,10 @@ import app.App;
 import jexer.*;
 import jexer.backend.Screen;
 import models.Screens;
+import utils.Logging;
 
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
 
 public class HomeController extends AbstractController {
     private TText logArea;
@@ -83,7 +85,7 @@ public class HomeController extends AbstractController {
                 new TAction() {
                     @Override
                     public void DO() {
-                        log("Program Exited");
+                        log("Program Exited\n");
                         root.getApplication().exit();
                     }
                 }
@@ -100,5 +102,6 @@ public class HomeController extends AbstractController {
     
     private void log(String message) {
         logArea.addLine(message + " ");
+        Logging.log(message, Level.INFO);
     }
 }
