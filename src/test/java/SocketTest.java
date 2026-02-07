@@ -9,6 +9,7 @@ import networking.Sender;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.*;
+import java.util.Scanner;
 
 public class SocketTest {
     private static Config conf;
@@ -27,6 +28,7 @@ public class SocketTest {
         receiver.setOpen(true);
 
         InetAddress toSend;
+        Scanner wait = new Scanner(System.in);
         try {
             //Replace with my IP address
             toSend = InetAddress.getByName("172.27.244.157");
