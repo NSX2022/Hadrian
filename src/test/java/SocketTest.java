@@ -29,16 +29,18 @@ public class SocketTest {
 
         InetAddress toSend;
         //Press ENTER when ready to send
-        Scanner wait = new Scanner(System.in);
+        while(true){
+            Scanner wait = new Scanner(System.in);
 
-        try {
-            //Replace with my IP address
-            toSend = InetAddress.getByName("172.27.244.157");
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
+            try {
+                //Replace with my IP address
+                toSend = InetAddress.getByName("72.93.81.88");
+            } catch (UnknownHostException e) {
+                throw new RuntimeException(e);
+            }
+
+            sender.sendMessage(wait.next(), toSend);
+            System.out.println("SENT MESSAGE");
         }
-
-        sender.sendMessage(wait.next(), toSend);
-        System.out.println("SENT MESSAGE");
     }
 }
