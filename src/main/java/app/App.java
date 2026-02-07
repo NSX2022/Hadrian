@@ -41,7 +41,7 @@ public class App extends TApplication {
     
     public static void changeScreen(AbstractController current, Screens toScreen) throws UnsupportedEncodingException {
         if (current.screen == toScreen) {
-            log("Already on page: " + current.screen.name());
+            //log("Already on page: " + current.screen.name());
             return;
         }
         

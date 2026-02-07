@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class SocketTest {
     private static Config conf;
-    public static void Main(String[] args){
+    public static void main(String[] args){
         conf = new Config();
         try {
             conf.read_config();
@@ -28,6 +28,7 @@ public class SocketTest {
         receiver.setOpen(true);
 
         InetAddress toSend;
+        //Press ENTER when ready to send
         Scanner wait = new Scanner(System.in);
         try {
             //Replace with my IP address
