@@ -41,7 +41,7 @@ public class App extends TApplication {
         new App().run();
     }
     
-    public static void changeScreen(AbstractController current, Screens toScreen) throws UnsupportedEncodingException {
+    public static void changeScreen(AbstractController current, Screens toScreen) {
         if (current.screen == toScreen) {
             String message = "Already on page: " + current.screen.name();
             Logging.log(message, Level.INFO);
@@ -53,7 +53,7 @@ public class App extends TApplication {
         
         AbstractController controller = switch (toScreen) {
             case HOME -> new HomeController(root);
-            case MESSAGES -> new MessageController(root, getCurrentUser());
+            case MESSAGES -> new MessageController(root, null);
             case HELP -> new HelpController(root);
             default -> throw new IllegalArgumentException("Unknown screen type:" + toScreen);
         };

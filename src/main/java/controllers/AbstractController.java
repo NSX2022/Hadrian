@@ -18,10 +18,9 @@ public abstract class AbstractController {
         this.root = root;
         this.screen = screen;
         
-        show(root);
+        show();
         
-        new TLabel(
-                root,
+        root.addLabel(
                 "# " + screen.name(),
                 2, 1
         );
@@ -33,7 +32,7 @@ public abstract class AbstractController {
         );
     }
     
-    protected abstract void show(TWindow root);
+    protected abstract void show();
     
     public void hide() {
         for (TWidget child : new ArrayList<>(root.getChildren()))

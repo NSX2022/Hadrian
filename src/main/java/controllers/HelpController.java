@@ -17,23 +17,18 @@ public class HelpController extends AbstractController {
     }
     
     @Override
-    protected void show(TWindow root) {
+    protected void show() {
         int menuX = 4, menuY = 5;
         Screen screen = root.getScreen();
         int width = screen.getWidth(), height = screen.getHeight();
         
-        new TButton(
-                root,
+        root.addButton(
                 "< Back",
                 menuX, menuY,
                 new TAction() {
                     @Override
                     public void DO() {
-                        try {
-                            App.changeScreen(HelpController.this, Screens.HOME);
-                        } catch (UnsupportedEncodingException e) {
-                            throw new RuntimeException(e);
-                        }
+                        App.changeScreen(HelpController.this, Screens.HOME);
                         Logging.log("Returning To Home Page", Level.INFO);
                     }
                 }

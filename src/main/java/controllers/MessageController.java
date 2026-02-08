@@ -8,7 +8,6 @@ import models.Screens;
 import models.User;
 import utils.Logging;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
@@ -21,23 +20,17 @@ public class MessageController extends AbstractController {
     }
     
     @Override
-    protected void show(TWindow root) {
-        int menuX = 4, menuY = 5;
+    protected void show() {
         Screen screen = root.getScreen();
-        int width = screen.getWidth(), height = screen.getHeight();
+        int menuX = 4, menuY = 5, width = screen.getWidth(), height = screen.getHeight();
         
-        new TButton(
-                root,
+        root.addButton(
                 "< Back",
                 menuX, menuY,
                 new TAction() {
                     @Override
                     public void DO() {
-                        try {
-                            App.changeScreen(MessageController.this, Screens.HOME);
-                        } catch (UnsupportedEncodingException e) {
-                            throw new RuntimeException(e);
-                        }
+                        App.changeScreen(MessageController.this, Screens.HOME);
                         Logging.log("Returning To Home Page", Level.INFO);
                     }
                 }
@@ -51,8 +44,7 @@ public class MessageController extends AbstractController {
         );
         scrollView.setActive(true);
         
-        TPanel content = new TPanel(
-                scrollView,
+        TPanel content = scrollView.addPanel(
                 0, 0,
                 scrollView.getWidth() - 1,
                 1  // will grow with content addition
@@ -61,14 +53,15 @@ public class MessageController extends AbstractController {
         ArrayList<Chat> chats = new ArrayList<>(user.getChats());
         int panelWidth = content.getWidth(), panelHeight = 3, y = 0;
         for (int i = 0; i < chats.size(); i++) {
-            TPanel panel = new TPanel(
-                    content,
+            Chat chat = chats.get(i);
+            
+            TPanel panel = content.addPanel(
                     menuX, y,
                     panelWidth, panelHeight
             );
             
             StringBuilder members = new StringBuilder();
-            ArrayList<User> users = new ArrayList<>(chats.get(i).getUsers());
+            ArrayList<User> users = new ArrayList<>(chat.getUsers());
             for (int j = 0; j < users.size(); j++) {
                 members.append(users.get(j).getUsername());
                 
@@ -76,12 +69,11 @@ public class MessageController extends AbstractController {
                     members.append(',');
             }
             
-            new TLabel(panel, "Members: " + members, 2, 1);
-            new TLabel(panel, "Last Message Preview: " + chats.get(i).getMessages().getLast(), 2, 2);
+            panel.addLabel("Members: " + members, 2, 1);
+            panel.addLabel("Last Message Preview: " + chat.getMessages().getLast(), 2, 2);
             
             int finalI = i;
-            new TButton(
-                    panel,
+            panel.addButton(
                     "> Open",
                     2, 3,
                     new TAction() {
@@ -100,48 +92,43 @@ public class MessageController extends AbstractController {
         
         
         // region New Chat Panel
-        TPanel newChatPanel = new TPanel(
-                root,
+        TPanel newChatPanel = root.addPanel(
                 (int) (width * .75f),
                 menuY + 2,
                 (int) (width * .25f) - 2,
                 (int) ((height - menuY - 2) * .8f)
         );
+        int fieldWidth = newChatPanel.getWidth() - 1, newChatPanelHeight = newChatPanel.getHeight();
         
-        new TLabel(
-                newChatPanel,
+        newChatPanel.addLabel(
                 "Send Message:",
                 1, 1
         );
         
-        TField ips = new TField(
-                newChatPanel,
+        TField ips = newChatPanel.addField(
                 1, 2,
-                newChatPanel.getWidth() - 1,
+                fieldWidth,
                 false,
                 "IP..."
         );
         
-        TField port = new TField(
-                newChatPanel,
+        TField port = newChatPanel.addField(
                 1, 3,
-                newChatPanel.getWidth() - 1,
+                fieldWidth,
                 false,
                 "Port..."
         );
         
-        TText messageBox = new TText(
-                newChatPanel,
+        TText messageBox = newChatPanel.addText(
                 "Message...",
                 1, 4,
-                newChatPanel.getWidth() - 1,
-                newChatPanel.getHeight() - 5
+                fieldWidth,
+                newChatPanelHeight - 5
         );
         
-        new TButton(
-                newChatPanel,
+        newChatPanel.addButton(
                 "Send Message",
-                1, newChatPanel.getHeight() - 1,
+                1, newChatPanelHeight - 1,
                 new TAction() {
                     @Override
                     public void DO() {
@@ -164,7 +151,7 @@ public class MessageController extends AbstractController {
                         Chat newChat = new Chat(
                                 chats.size(),
                                 members,
-                                messageBox.getText()
+                                messageBox.getText().strip()
                         );
                         // TODO chat creation and message send action
                     }
