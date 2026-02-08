@@ -145,6 +145,17 @@ public class MessageController extends AbstractController {
                 new TAction() {
                     @Override
                     public void DO() {
+                        String[] receivers = ips.getText().strip().split(", ");
+                        if (receivers.length == 0) {
+                            displayNotif("At Least 1 Receiver Is Required For New Chat");
+                            Logging.log("Tried To Create New Chat With No Receivers", Level.WARNING);
+                            return;
+                        } if (port.getText().isBlank() || messageBox.getText().isBlank()) {
+                            displayNotif("All Text Boxes Must Be Filled In");
+                            Logging.log("Tried To Create New Chat Without Filling In All Boxes", Level.WARNING);
+                            return;
+                        }
+                        
                         ArrayList<User> members = new ArrayList<>();
                         for (String ip : ips.getText().split(","))
                             members.add(getUserFromServer(ip)); // ???
