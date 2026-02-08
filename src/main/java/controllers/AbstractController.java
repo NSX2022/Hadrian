@@ -9,6 +9,15 @@ import utils.Logging;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+/**
+ * Abstract base classes for shared controller logic.
+ * This controller should only ever be the parent of controllers.
+ * <p>
+ * This abstract class is used to enforce consistent structure
+ * across controllers in the Hadrian application - it provides
+ * required methods, common functionality, or reusable logic for
+ * concrete page controllers.
+ */
 public abstract class AbstractController {
     protected TWindow root;
     public Screens screen;
@@ -32,13 +41,32 @@ public abstract class AbstractController {
         );
     }
     
+    /**
+     * Abstract method required for every controller class
+     * <p>
+     * Creates the entire UI for each page, excluding certain elements required for
+     * all pages that are already created in {@link #AbstractController(TWindow, Screens)}
+     */
     protected abstract void show();
     
+    /**
+     * Removes all page elements from {@code root}, essentially closing the page,
+     * so a new one to be displayed in its place.
+     */
     public void hide() {
         for (TWidget child : new ArrayList<>(root.getChildren()))
             child.remove();
     }
     
+    /**
+     * Displays a notification message in the center of
+     * the user's screen for two seconds, then disappears.
+     * <p>
+     * Method actions run in its own thread,
+     * main program is not affected by timer.
+     *
+     * @param message message to be displayed and centered
+     */
     public final void displayNotif(String message) {
         new Thread(() -> {
             notifLabel.setX((root.getScreen().getWidth() - message.length()) / 2);

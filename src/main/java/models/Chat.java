@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+/**
+ * Dataclass representing a singular chat.
+ */
 public class Chat {
     private final int localID;
     private final HashSet<User> users;
@@ -51,6 +54,11 @@ public class Chat {
         return users.remove(user);
     }
     
+    /**
+     * Adds a message to the end of the chat's message collection
+     *
+     * @param message message to be added to the end of the collection
+     */
     public void addMessage(String message) {
         messages.add(message);
     }

@@ -2,6 +2,9 @@ package models;
 
 import java.util.LinkedHashSet;
 
+/**
+ * Dataclass representing a singular user.
+ */
 public class User {
     private String ip, username;
     private final LinkedHashSet<Chat> chats;

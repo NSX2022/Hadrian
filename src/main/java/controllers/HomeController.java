@@ -8,6 +8,9 @@ import utils.Logging;
 
 import java.util.logging.Level;
 
+/**
+ * Controller for the initial "Home" page in Hadrian application.
+ */
 public class HomeController extends AbstractController {
     private TText logArea;
     
@@ -86,6 +89,14 @@ public class HomeController extends AbstractController {
         );
     }
     
+    /**
+     * Wrapper for screen changing functionality that uses the same first parameter.
+     *
+     * @param screen screen to change to - from enum list of pages
+     * @see Screens
+     * @see App#changeScreen(AbstractController, Screens)
+     *
+     */
     private void changeScreen(Screens screen) {
         App.changeScreen(HomeController.this, screen);
     }
