@@ -7,7 +7,6 @@ import networking.Receiver;
 import networking.Sender;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
 
@@ -18,29 +17,31 @@ public class SocketTest {
         try {
             conf.read_config();
         } catch (FileNotFoundException e) {
+            System.out.println(SocketTest.class.getProtectionDomain().getCodeSource().getLocation());
             throw new RuntimeException(e);
         }
 
         Receiver receiver = new Receiver(conf);
         Sender sender = new Sender(conf);
 
-        receiver.startServer();
         receiver.setOpen(true);
+        receiver.startServer();
 
         InetAddress toSend;
         //Press ENTER when ready to send
-        while(true){
-            Scanner wait = new Scanner(System.in);
-
-            try {
-                //Replace with my IP address
-                toSend = InetAddress.getByName("72.93.81.88");
-            } catch (UnknownHostException e) {
-                throw new RuntimeException(e);
-            }
-
-            sender.sendMessage(wait.next(), toSend);
-            System.out.println("SENT MESSAGE");
+        Scanner wait = new Scanner(System.in);
+        try {
+            //Replace with my IP address
+            toSend = InetAddress.getByName("10.3.30.137");
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
         }
+
+        {
+            System.out.print(">");
+            sender.sendMessage(wait.next(), toSend);
+        } while(wait.hasNext())
+
+        receiver.stopServer();
     }
 }

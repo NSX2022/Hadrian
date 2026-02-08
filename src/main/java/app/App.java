@@ -51,7 +51,7 @@ public class App extends TApplication {
         
         AbstractController controller = switch (toScreen) {
             case HOME -> new HomeController(root);
-            case MESSAGES -> new MessageController(root, getCurrentUser());
+            //case MESSAGES -> new MessageController(root, getCurrentUser());
             case HELP -> new HelpController(root);
             default -> throw new IllegalArgumentException("Unknown screen type:" + toScreen);
         };
