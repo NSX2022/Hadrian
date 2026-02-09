@@ -18,7 +18,13 @@ public class Sender {
     }
 
     //Decided to make this return false rather than an exception when a message attempt fails
-
+    //TODO
+    /**
+     *
+     * @param user_message
+     * @param IP
+     * @return
+     */
     public boolean sendMessage(String user_message, InetAddress IP){
         byte message[] = user_message.getBytes();
         DatagramSocket out_socket = null;

@@ -4,6 +4,7 @@ import org.json.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 /**
@@ -30,8 +31,12 @@ public class Config {
     }
 
     public void read_config() throws FileNotFoundException {
-        String json = new Scanner(new File("src/main/resources/config.json")).useDelimiter("\\Z").next();
-        JSONObject json_object = new JSONObject(json);
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.json");
+        if (inputStream == null) {
+            throw new FileNotFoundException("config.json not found in resources");
+        }
+        String json = new Scanner(inputStream).useDelimiter("\\Z").next();        JSONObject json_object = new JSONObject(json);
         port = json_object.getInt("port");
 
         ip_blacklist = json_object.getJSONArray("ip_blacklist")

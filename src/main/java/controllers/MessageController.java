@@ -145,7 +145,7 @@ public class MessageController extends AbstractController {
                         
                         ArrayList<User> members = new ArrayList<>();
                         for (String ip : ips.getText().split(","))
-                            members.add(getUserFromServer(ip)); // ???
+                            //members.add(getUserFromServer(ip)); // ???
                         members.add(user);
                         
                         Chat newChat = new Chat(
