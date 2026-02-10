@@ -1,113 +1,115 @@
 package networking;
+
 import config.Config;
+import utils.Logging;
 import utils.Primes;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.management.GarbageCollectorMXBean;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class Receiver {
     //Whether or not to listen on the port
     private boolean open = false;
     private Config conf;
-    private Thread server_thread;
-
+    private Thread serverThread;
+    
     public Receiver(Config conf) {
         this.conf = conf;
     }
-
+    
     /**
-     * Returns a thread that runs the message listener. The listener in the current thread cannot be
-     * updated (e.g, which ports it listens to), the thread must be stopped and updated
-     * (Done by stopServer() by default)
-     * @return
-     * @throws UnknownHostException
-     * @throws FileNotFoundException
+     * Reads the configuration and creates a thread to manage message listening.
+     * <p>
+     * Thread can only be stopped or updated using the appropriate provided methods.
+     *
+     * @return message listener thread
+     * @throws FileNotFoundException when config file cannot be found
+     * @see #startServer()
+     * @see #stopServer()
      */
-    public Thread serverFactory() throws UnknownHostException {
+    private Thread serverFactory() throws FileNotFoundException {
         //For loading config changes while the program is executing, kill the current server/thread and start a new one
-        try {
-            conf.read_config();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        return (new Thread(() -> {
+        conf.readConfig();
+        
+        return new Thread(() -> {
             DatagramSocket socket;
             try {
                 socket = new DatagramSocket(conf.getPort());
             } catch (SocketException e) {
+                Logging.log("Failed To Initialize Server Thread", Level.SEVERE, e);
                 throw new RuntimeException(e);
             }
-
+            
             DatagramPacket packet =
-                    new DatagramPacket(new byte[conf.getMax_bytes_per_message()], conf.getMax_bytes_per_message());
-
-            String message_holder;
+                    new DatagramPacket(new byte[conf.getMaxBytesPerMessage()], conf.getMaxBytesPerMessage());
+            
+            String messageHolder;
             //TODO: Switch to BigDecimal, difficulty system
-
-            while(!this.server_thread.isInterrupted()){
+            
+            while (!serverThread.isInterrupted()) {
                 //TODO Check message header, Send + check pub_num et al, Decrypt, get + send confirmation/username
                 try {
-                    long factors[] = Primes.generatePrimes(5);
-                    long pub_num = factors[0] * factors[1];
-
-
+                    long[] factors = Primes.generatePrimes(5);
+                    long pubNum = factors[0] * factors[1];
+                    
                     socket.receive(packet);
-                    message_holder = new String(packet.getData());
-
+                    messageHolder = new String(packet.getData());
+                    
                     //TODO message handling
-                    System.out.println(message_holder);
-
+                    System.out.println(messageHolder);
                 } catch (IOException e) {
+                    Logging.log("Failed To Receive Packets", Level.SEVERE, e);
                     throw new RuntimeException(e);
                 }
             }
-
-        }));
+            
+            socket.close();
+        });
     }
-
-
-    public void startServer() {
-        try {
-            server_thread = serverFactory();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-        server_thread.start();
+    
+    /**
+     * Creates the server thread, saves it to a local variable, and starts it.
+     *
+     * @throws FileNotFoundException when config file cannot be found
+     * @see #serverFactory()
+     * @see #stopServer()
+     */
+    public void startServer() throws FileNotFoundException {
+        serverThread = serverFactory();
+        serverThread.start();
     }
-
+    
+    /**
+     * Stops the server thread.
+     *
+     * @see #serverFactory()
+     * @see #startServer()
+     */
     public void stopServer() {
-        server_thread.interrupt();
-        try {
-            server_thread = serverFactory();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
+        serverThread.interrupt();
     }
-
+    
     public boolean isOpen() {
         return open;
     }
-
+    
     public void setOpen(boolean open) {
         this.open = open;
     }
-
+    
     public Config getConf() {
         return conf;
     }
-
+    
     public void setConf(Config conf) {
         this.conf = conf;
     }
-
-    public Thread getServer_thread() {
-        return server_thread;
+    
+    public Thread getServerThread() {
+        return serverThread;
     }
 }

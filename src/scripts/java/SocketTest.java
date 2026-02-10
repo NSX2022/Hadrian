@@ -12,21 +12,21 @@ import java.util.Scanner;
 
 public class SocketTest {
     private static Config conf;
-    public static void main(String[] args){
+    public static void main(String[] args) throws FileNotFoundException {
         conf = new Config();
         try {
-            conf.read_config();
+            conf.readConfig();
         } catch (FileNotFoundException e) {
             System.out.println(SocketTest.class.getProtectionDomain().getCodeSource().getLocation());
             throw new RuntimeException(e);
         }
-
+        
         Receiver receiver = new Receiver(conf);
         Sender sender = new Sender(conf);
-
+        
         receiver.setOpen(true);
         receiver.startServer();
-
+        
         InetAddress toSend;
         //Press ENTER when ready to send
         Scanner wait = new Scanner(System.in);
@@ -36,12 +36,12 @@ public class SocketTest {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-
-        {
+        
+        while (wait.hasNext()) {
             System.out.print(">");
             sender.sendMessage(wait.next(), toSend);
-        } while(wait.hasNext())
-
+        }
+        
         receiver.stopServer();
     }
 }

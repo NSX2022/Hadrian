@@ -1,112 +1,118 @@
 package config;
 
 import org.json.*;
+import utils.Logging;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
 
 /**
- * Loads and stores specific JSON values from config.json
+ * Utility class that loads and stores specific JSON values from config.json
  */
 public class Config {
     /*
        Load config.json values for the server + TUI
     */
-
+    
     //Default port number
-    private int port = 9090;
-    private String[] ip_blacklist;
-    private String[] mac_blacklist;
-    private String[] ip_whitelist;
-    private String[] mac_whitelist;
+    private int port = 9090, maxBytesPerMessage = 1024;
+    private String[] ipBlacklist, macBlacklist, ipWhitelist, macWhitelist;
     //Whether or not to display the IP address in the TUI
-    private boolean hide_ip = true;
-    private int max_bytes_per_message = 1024;
+    private boolean hideIp = true;
     private String username = "Anon";
-
-    public Config(){
+    
+    public Config() {
         //TODO Create default values if the file does not exist
     }
-
-    public void read_config() throws FileNotFoundException {
-
+    
+    /**
+     * Reads config.json, setting the values contained to java variables to be accessed using getters/setters.
+     *
+     * @throws FileNotFoundException if config.json is not found
+     * @see JSONObject
+     * @see JSONObject#getJSONArray(String)
+     * @see #parseJsonArray(JSONArray)
+     */
+    public void readConfig() throws FileNotFoundException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.json");
         if (inputStream == null) {
-            throw new FileNotFoundException("config.json not found in resources");
+            String message = "config.json Not Found In Resources Folder";
+            Logging.log(message, Level.SEVERE, new FileNotFoundException(message));
+            throw new FileNotFoundException(message);
         }
-        String json = new Scanner(inputStream).useDelimiter("\\Z").next();        JSONObject json_object = new JSONObject(json);
+        
+        String json = new Scanner(inputStream).useDelimiter("\\Z").next();
+        JSONObject json_object = new JSONObject(json);
         port = json_object.getInt("port");
-
-        ip_blacklist = json_object.getJSONArray("ip_blacklist")
-                .toList()
-                .stream()
-                .map(Object::toString)
-                .toArray(String[]::new);
-
-        mac_blacklist = json_object.getJSONArray("mac_blacklist")
-                .toList()
-                .stream()
-                .map(Object::toString)
-                .toArray(String[]::new);
-
-        ip_whitelist = json_object.getJSONArray("ip_whitelist")
-                .toList()
-                .stream()
-                .map(Object::toString)
-                .toArray(String[]::new);
-
-        mac_whitelist = json_object.getJSONArray("mac_whitelist")
-                .toList()
-                .stream()
-                .map(Object::toString)
-                .toArray(String[]::new);
-
-        hide_ip = json_object.getBoolean("hide_ip");
-
-        max_bytes_per_message = json_object.getInt("max_bytes_per_message");
-
+        
+        ipBlacklist = parseJsonArray(json_object.getJSONArray("ipBlacklist"));
+        macBlacklist = parseJsonArray(json_object.getJSONArray("macBlacklist"));
+        ipWhitelist = parseJsonArray(json_object.getJSONArray("ipWhitelist"));
+        macWhitelist = parseJsonArray(json_object.getJSONArray("macWhitelist"));
+        
+        hideIp = json_object.getBoolean("hideIp");
+        maxBytesPerMessage = json_object.getInt("maxBytesPerMessage");
         username = json_object.getString("username");
     }
-
+    
+    /**
+     * Parse a JSON array of objects to a string array,
+     * containing only the string values of the objects in the given array.
+     *
+     * @param jsonArray array loaded from JSON as a {@code JSONArray} object.
+     * @return The parsed string array of the given JSON array
+     * @see JSONArray
+     */
+    private String[] parseJsonArray(JSONArray jsonArray) {
+        ArrayList<Object> array = new ArrayList<>(jsonArray.toList());
+        String[] stringValues = new String[array.size() - 1];
+        
+        for (int i = 0; i < array.size(); i++)
+            stringValues[i] = array.get(i).toString();
+        
+        return stringValues;
+    }
+    
     public int getPort() {
         return port;
     }
-
+    
     public void setPort(int port) {
         this.port = port;
     }
-
-    public String[] getMac_blacklist() {
-        return mac_blacklist;
+    
+    public String[] getMacBlacklist() {
+        return macBlacklist;
     }
-
-    public String[] getIp_blacklist() {
-        return ip_blacklist;
+    
+    public String[] getIpBlacklist() {
+        return ipBlacklist;
     }
-
-    public String[] getIp_whitelist() {
-        return ip_whitelist;
+    
+    public String[] getIpWhitelist() {
+        return ipWhitelist;
     }
-
-    public String[] getMac_whitelist() {
-        return mac_whitelist;
+    
+    public String[] getMacWhitelist() {
+        return macWhitelist;
     }
-
-    public boolean getHide_ip() {
-        return hide_ip;
+    
+    public boolean getHideIp() {
+        return hideIp;
     }
-
-    public void setHide_ip(boolean hide_ip) {
-        this.hide_ip = hide_ip;
+    
+    public void setHideIp(boolean hideIp) {
+        this.hideIp = hideIp;
     }
-
-    public int getMax_bytes_per_message() {
-        return max_bytes_per_message;
+    
+    public int getMaxBytesPerMessage() {
+        return maxBytesPerMessage;
     }
-
-    public void setMax_bytes_per_message(int max_bytes_per_message) {
-        this.max_bytes_per_message = max_bytes_per_message;
+    
+    public void setMaxBytesPerMessage(int maxBytesPerMessage) {
+        this.maxBytesPerMessage = maxBytesPerMessage;
     }
 }
