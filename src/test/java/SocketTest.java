@@ -2,9 +2,9 @@
 // Posted by user3841581
 // Retrieved 2026-02-05, License - CC BY-SA 3.0
 
-import config.Config;
-import networking.Receiver;
-import networking.Sender;
+import app.Config;
+import network.Receiver;
+import network.Sender;
 
 import java.io.FileNotFoundException;
 import java.net.*;

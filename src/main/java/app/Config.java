@@ -1,4 +1,4 @@
-package config;
+package app;
 
 import org.json.*;
 import utils.Logging;

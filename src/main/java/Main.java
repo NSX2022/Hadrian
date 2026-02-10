@@ -1,4 +1,4 @@
-import networking.Receiver;
+import network.Receiver;
 
 public class Main {
     //TODO

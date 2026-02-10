@@ -1,6 +1,6 @@
-package networking;
+package network;
 
-import config.Config;
+import app.Config;
 import utils.Logging;
 
 import java.io.IOException;

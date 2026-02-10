@@ -1,4 +1,4 @@
-import config.Config;
+import app.Config;
 
 import java.io.FileNotFoundException;
 

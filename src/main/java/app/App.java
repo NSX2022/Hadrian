@@ -1,6 +1,5 @@
 package app;
 
-import config.Config;
 import controllers.AbstractController;
 import controllers.HelpController;
 import controllers.HomeController;
