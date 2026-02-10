@@ -68,11 +68,9 @@ public class Primes {
      * @return true if {@code number} is a prime number, false otherwise
      */
     public static boolean isPrime(long number) {
-        for (int i = 2; i <= number / i; i++) {
+        for (int i = 2; i <= number / i; i++)
             if (number % i == 0)
                 return false;
-        }
-        
         return true;
     }
     
@@ -89,7 +87,7 @@ public class Primes {
      * @see BigInteger
      * @see BigDecimal
      */
-    private static BigInteger RandomBigInteger(BigInteger rangeStart, BigInteger rangeEnd) {
+    private static BigInteger randomBigInteger(BigInteger rangeStart, BigInteger rangeEnd) {
         SecureRandom secRand = new SecureRandom();
         
         int scale = rangeEnd.toString().length();
