@@ -6,9 +6,11 @@ import jexer.backend.Screen;
 import models.Screens;
 import utils.Logging;
 
-import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 
+/**
+ * Controller for the initial "Home" page in Hadrian application.
+ */
 public class HomeController extends AbstractController {
     private TText logArea;
     
@@ -17,15 +19,14 @@ public class HomeController extends AbstractController {
     }
     
     @Override
-    protected void show(TWindow root) {
+    protected void show() {
         int menuX = 4, menuY = 5;
         Screen screen = root.getScreen();
         int width = screen.getWidth(), height = screen.getHeight();
         
         // TODO make window black + further customize theme
         
-        logArea = new TText(
-                root,
+        logArea = root.addText(
                 "Logger Initialized... ",
                 width / 2 - 2,
                 height / 2,
@@ -37,8 +38,7 @@ public class HomeController extends AbstractController {
         
         // TODO customize button themes
         
-        new TButton(
-                root,
+        root.addButton(
                 "> Toggle Server",
                 menuX, menuY,
                 new TAction() {
@@ -50,8 +50,7 @@ public class HomeController extends AbstractController {
                 }
         );
         
-        new TButton(
-                root,
+        root.addButton(
                 "> Messages",
                 menuX, menuY + 4,
                 new TAction() {
@@ -64,8 +63,7 @@ public class HomeController extends AbstractController {
                 }
         );
         
-        new TButton(
-                root,
+        root.addButton(
                 "> Help",
                 menuX, menuY + 8,
                 new TAction() {
@@ -78,8 +76,7 @@ public class HomeController extends AbstractController {
                 }
         );
         
-        new TButton(
-                root,
+        root.addButton(
                 "< Exit",
                 menuX, menuY + 12,
                 new TAction() {
@@ -92,12 +89,16 @@ public class HomeController extends AbstractController {
         );
     }
     
+    /**
+     * Wrapper for screen changing functionality that uses the same first parameter.
+     *
+     * @param screen screen to change to - from enum list of pages
+     * @see Screens
+     * @see App#changeScreen(AbstractController, Screens)
+     *
+     */
     private void changeScreen(Screens screen) {
-        try {
-            App.changeScreen(HomeController.this, screen);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        App.changeScreen(HomeController.this, screen);
     }
     
     private void log(String message) {
