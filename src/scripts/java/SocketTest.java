@@ -37,10 +37,11 @@ public class SocketTest {
             throw new RuntimeException(e);
         }
 
-        {
+        do {
             System.out.print(">");
-            sender.sendMessage(wait.next(), toSend);
-        } while(wait.hasNext())
+            System.out.flush();
+            sender.sendMessage(wait.nextLine(), toSend);
+        } while(wait.hasNextLine());
 
         receiver.stopServer();
     }
