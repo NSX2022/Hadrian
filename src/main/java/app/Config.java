@@ -34,7 +34,6 @@ public class Config {
      * @throws FileNotFoundException if config.json is not found
      * @see JSONObject
      * @see JSONObject#getJSONArray(String)
-     * @see #parseJsonArray(JSONArray)
      */
     public void readConfig() throws FileNotFoundException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.json");
@@ -45,36 +44,18 @@ public class Config {
         }
         
         String json = new Scanner(inputStream).useDelimiter("\\Z").next();
-        JSONObject json_object = new JSONObject(json);
-        port = json_object.getInt("port");
+        JSONObject jsonObject = new JSONObject(json);
+        port = jsonObject.getInt("port");
 
         //NOTE: Camel case
-        ipBlacklist = parseJsonArray(json_object.getJSONArray("ipBlacklist"));
-        macBlacklist = parseJsonArray(json_object.getJSONArray("macBlacklist"));
-        ipWhitelist = parseJsonArray(json_object.getJSONArray("ipWhitelist"));
-        macWhitelist = parseJsonArray(json_object.getJSONArray("macWhitelist"));
+        ipBlacklist = jsonObject.getJSONArray("ipBlacklist").toList().toArray(new String[0]);
+        macBlacklist = jsonObject.getJSONArray("macBlacklist").toList().toArray(new String[0]);
+        ipWhitelist = jsonObject.getJSONArray("ipWhitelist").toList().toArray(new String[0]);
+        macWhitelist = jsonObject.getJSONArray("macWhitelist").toList().toArray(new String[0]);
         
-        hideIp = json_object.getBoolean("hideIp");
-        maxBytesPerMessage = json_object.getInt("maxBytesPerMessage");
-        username = json_object.getString("username");
-    }
-    
-    /**
-     * Parse a JSON array of objects to a string array,
-     * containing only the string values of the objects in the given array.
-     *
-     * @param jsonArray array loaded from JSON as a {@code JSONArray} object.
-     * @return The parsed string array of the given JSON array
-     * @see JSONArray
-     */
-    private String[] parseJsonArray(JSONArray jsonArray) {
-        ArrayList<Object> array = new ArrayList<>(jsonArray.toList());
-        String[] stringValues = new String[array.size() - 1];
-        
-        for (int i = 0; i < array.size(); i++)
-            stringValues[i] = array.get(i).toString();
-        
-        return stringValues;
+        hideIp = jsonObject.getBoolean("hideIp");
+        maxBytesPerMessage = jsonObject.getInt("maxBytesPerMessage");
+        username = jsonObject.getString("username");
     }
     
     public int getPort() {
