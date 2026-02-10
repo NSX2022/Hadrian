@@ -1,18 +1,18 @@
 {
   "port": 9090,
-  "hide_ip": true,
-  "max_bytes_per_message": 1024,
+  "hideIp": true,
+  "maxBytesPerMessage": 1024,
   "username": "Anon",
-  "ip_blacklist": [
+  "ipBlacklist": [
 
   ],
-  "mac_blacklist": [
+  "macBlacklist": [
 
   ],
-  "ip_whitelist": [
+  "ipWhitelist": [
 
   ],
-  "mac_whitelist": [
+  "macWhitelist": [
 
   ]
 }

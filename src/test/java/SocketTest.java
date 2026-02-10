@@ -28,8 +28,7 @@ public class SocketTest {
         receiver.startServer();
         
         InetAddress toSend;
-        //Press ENTER when ready to send
-        Scanner wait = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         try {
             //Replace with my IP address
             toSend = InetAddress.getByName("10.3.30.137");
@@ -37,9 +36,9 @@ public class SocketTest {
             throw new RuntimeException(e);
         }
         
-        while (wait.hasNext()) {
+        while (input.hasNextLine()) {
             System.out.print(">");
-            sender.sendMessage(wait.next(), toSend);
+            sender.sendMessage(input.nextLine(), toSend);
         }
         
         receiver.stopServer();

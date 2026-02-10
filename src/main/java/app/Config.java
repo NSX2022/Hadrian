@@ -47,7 +47,8 @@ public class Config {
         String json = new Scanner(inputStream).useDelimiter("\\Z").next();
         JSONObject json_object = new JSONObject(json);
         port = json_object.getInt("port");
-        
+
+        //NOTE: Camel case
         ipBlacklist = parseJsonArray(json_object.getJSONArray("ipBlacklist"));
         macBlacklist = parseJsonArray(json_object.getJSONArray("macBlacklist"));
         ipWhitelist = parseJsonArray(json_object.getJSONArray("ipWhitelist"));
