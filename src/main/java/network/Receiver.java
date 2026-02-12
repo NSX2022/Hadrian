@@ -44,9 +44,6 @@ public class Receiver {
                 throw new RuntimeException(e);
             }
             
-            DatagramPacket packet =
-                    new DatagramPacket(new byte[conf.getMaxBytesPerMessage()], conf.getMaxBytesPerMessage());
-            
             String messageHolder;
             //TODO: Switch to BigDecimal, difficulty system
             
@@ -55,9 +52,12 @@ public class Receiver {
                 try {
                     long[] factors = Primes.generatePrimes(5);
                     long pubNum = factors[0] * factors[1];
-                    
+
+                    byte[] buffer = new byte[conf.getMaxBytesPerMessage()];
+                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+
                     socket.receive(packet);
-                    messageHolder = new String(packet.getData());
+                    messageHolder = new String(packet.getData(), 0, packet.getLength());
                     
                     //TODO message handling
                     System.out.println(messageHolder);
