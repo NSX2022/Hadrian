@@ -60,7 +60,7 @@ public class Receiver {
                     messageHolder = new String(packet.getData(), 0, packet.getLength());
                     
                     //TODO message handling
-                    System.out.println(messageHolder);
+                    System.out.println(">"+messageHolder);
                 } catch (IOException e) {
                     Logging.log("Failed To Receive Packets", Level.SEVERE, e);
                     throw new RuntimeException(e);

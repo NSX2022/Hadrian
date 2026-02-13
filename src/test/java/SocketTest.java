@@ -37,7 +37,7 @@ public class SocketTest {
         }
         
         while (input.hasNextLine()) {
-            System.out.print(">");
+            System.out.print("\n>");
             sender.sendMessage(input.nextLine(), toSend);
         }
         
