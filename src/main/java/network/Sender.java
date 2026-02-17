@@ -65,6 +65,8 @@ public class Sender {
         } catch (IOException e) {
             Logging.log("Failed To Send Message", Level.SEVERE, e);
             return false;
+        } finally {
+            outSocket.close();
         }
         
         return true;
