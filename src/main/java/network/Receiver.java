@@ -11,6 +11,10 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.logging.Level;
 
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+
+
 public class Receiver {
     //Whether or not to listen on the port
     private boolean open = false;
@@ -50,17 +54,20 @@ public class Receiver {
             while (!serverThread.isInterrupted()) {
                 //TODO Check message header, Send + check pub_num et al, Decrypt, get + send confirmation/username
                 try {
-                    long[] factors = Primes.generatePrimes(5);
-                    long pubNum = factors[0] * factors[1];
+                    if (this.open){
+                        long[] factors = Primes.generatePrimes(5);
+                        long pubNum = factors[0] * factors[1];
 
-                    byte[] buffer = new byte[conf.getMaxBytesPerMessage()];
-                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                        byte[] buffer = new byte[conf.getMaxBytesPerMessage()];
+                        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
-                    socket.receive(packet);
-                    messageHolder = new String(packet.getData(), 0, packet.getLength());
-                    
-                    //TODO message handling
-                    System.out.println(">"+messageHolder);
+                        socket.receive(packet);
+                        //Use packet.getAddress() to get the IP
+                        messageHolder = new String(packet.getData(), 0, packet.getLength());
+
+                        //TODO message handling
+                        System.out.println(">"+messageHolder);
+                    }
                 } catch (IOException e) {
                     Logging.log("Failed To Receive Packets", Level.SEVERE, e);
                     throw new RuntimeException(e);
