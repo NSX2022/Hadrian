@@ -10,6 +10,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.logging.Level;
 
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+
 /**
  * A class providing the necessary methods to send messages between Hadrian applications.
  * <p>

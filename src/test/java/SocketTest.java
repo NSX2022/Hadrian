@@ -30,14 +30,14 @@ public class SocketTest {
         InetAddress toSend;
         Scanner input = new Scanner(System.in);
         try {
-            //Replace with my IP address
-            toSend = InetAddress.getByName("10.3.30.137");
+            //add peer's IP from running ip addr. Google DNS server is an example IP
+            toSend = InetAddress.getByName("8.8.8.8");
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
         
         while (input.hasNextLine()) {
-            System.out.print(">");
+            System.out.print("\n>");
             sender.sendMessage(input.nextLine(), toSend);
         }
         
