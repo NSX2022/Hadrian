@@ -15,7 +15,7 @@ public class User {
         chats = new LinkedHashSet<>();
     }
     
-    public User(String ip, String username, LinkedHashSet<Chat> chats) {  // existing user (info from server ???)
+    public User(String ip, String username, LinkedHashSet<Chat> chats) {
         this.ip = ip;
         this.username = username;
         this.chats = chats;
@@ -40,6 +40,14 @@ public class User {
     
     public LinkedHashSet<Chat> getChats() {
         return chats;
+    }
+    
+    public void addChat(Chat chat) {
+        chats.add(chat);
+    }
+    
+    public void removeChat(Chat chat) {
+        chats.remove(chat);
     }
     // endregion
     
