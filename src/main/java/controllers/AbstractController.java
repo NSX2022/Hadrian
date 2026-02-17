@@ -27,8 +27,6 @@ public abstract class AbstractController {
         this.root = root;
         this.screen = screen;
         
-        show();
-        
         root.addLabel(
                 "# " + screen.name(),
                 2, 1

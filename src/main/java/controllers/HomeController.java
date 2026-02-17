@@ -16,6 +16,7 @@ public class HomeController extends AbstractController {
     
     public HomeController(TWindow root) {
         super(root, Screens.HOME);
+        show();
     }
     
     @Override

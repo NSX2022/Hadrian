@@ -18,6 +18,8 @@ public class MessageController extends AbstractController {
     public MessageController(TWindow root, User user) {
         super(root, Screens.MESSAGES);
         this.user = user;
+        
+        show();
     }
     
     @Override

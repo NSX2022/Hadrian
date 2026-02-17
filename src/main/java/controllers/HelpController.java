@@ -14,6 +14,7 @@ import java.util.logging.Level;
 public class HelpController extends AbstractController {
     public HelpController(TWindow root) {
         super(root, Screens.HELP);
+        show();
     }
     
     @Override
