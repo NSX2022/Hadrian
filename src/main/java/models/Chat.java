@@ -9,57 +9,61 @@ import java.util.LinkedList;
  */
 public class Chat {
     private final int localID;
-    private final HashSet<User> users;
-    private final LinkedList<String> messages;
+    private final HashSet<String> users;
+    private final LinkedList<Message> messages;
     
-    public Chat(int localID, ArrayList<User> members, String firstMessage) {
+    public Chat(int localID, ArrayList<String> members, String firstMessage, User user) {
         this.localID = localID;
         users = new HashSet<>(members);
+        if (!members.contains(user.getIp()))
+            users.add(user.getIp());
         messages = new LinkedList<>();
         
-        messages.add(firstMessage);
+        addMessage(firstMessage, user);
+        
+        user.addChat(this);
     }
     
     public int getId() {
         return localID;
     }
     
-    public HashSet<User> getUsers() {
+    public HashSet<String> getUsers() {
         return users;
     }
     
-    public LinkedList<String> getMessages() {
+    public LinkedList<Message> getMessages() {
         return messages;
     }
     
     /**
-     * Adds a user to a chat's user collection.
+     * Adds a user's IP address to a chat's user collection.
      *
-     * @param user User object to be added to collection
+     * @param user User IP to be added to collection
      * @return true if user was not already in collection and added successfully, false otherwise.
-     * @see User
      */
-    public boolean addUser(User user) {
+    public boolean addUser(String user) {
         return users.add(user);
     }
     
     /**
-     * Removes a user from a chat's user collection
+     * Removes a user's IP from a chat's user collection
      *
-     * @param user User object to be removed from collection
+     * @param user User IP to be removed from collection
      * @return true if user was in collection and removed successfully, false otherwise.
-     * @see User
      */
-    public boolean removeUser(User user) {
+    public boolean removeUser(String user) {
         return users.remove(user);
     }
     
     /**
-     * Adds a message to the end of the chat's message collection
+     * Adds a message object to the end of the chat's message collection
      *
-     * @param message message to be added to the end of the collection
+     * @param text text to be added to the end of the collection
+     * @see Message
      */
-    public void addMessage(String message) {
+    public void addMessage(String text, User sender) {
+        Message message = new Message(text, sender);
         messages.add(message);
     }
 }

@@ -1,5 +1,8 @@
 package models;
 
+import tutorial.Tutorial;
+
+import java.net.InetAddress;
 import java.util.LinkedHashSet;
 
 /**
@@ -13,9 +16,18 @@ public class User {
         this.ip = ip;
         this.username = username;
         chats = new LinkedHashSet<>();
+        
+        new Tutorial(
+                this,
+                new User(
+                        InetAddress.getLoopbackAddress().getHostAddress(),
+                        "TutorialBot",
+                        null
+                )
+        );
     }
     
-    public User(String ip, String username, LinkedHashSet<Chat> chats) {  // existing user (info from server ???)
+    public User(String ip, String username, LinkedHashSet<Chat> chats) {
         this.ip = ip;
         this.username = username;
         this.chats = chats;
@@ -40,6 +52,14 @@ public class User {
     
     public LinkedHashSet<Chat> getChats() {
         return chats;
+    }
+    
+    public void addChat(Chat chat) {
+        chats.add(chat);
+    }
+    
+    public void removeChat(Chat chat) {
+        chats.remove(chat);
     }
     // endregion
     

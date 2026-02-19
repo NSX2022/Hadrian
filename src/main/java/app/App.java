@@ -3,17 +3,22 @@ package app;
 import controllers.AbstractController;
 import controllers.HelpController;
 import controllers.HomeController;
+import controllers.MessageController;
 import jexer.TApplication;
 import jexer.TWindow;
 import models.Screens;
+import models.User;
 import utils.Logging;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 
 public class App extends TApplication {
     private static TWindow root;
+    private static User user;
     
     public App() throws UnsupportedEncodingException {
         super(BackendType.XTERM);
@@ -26,16 +31,18 @@ public class App extends TApplication {
         );
         
         new HomeController(root);
+        
+        try {
+            user = new User(InetAddress.getLocalHost().getHostAddress(), "someUsername");
+        } catch (UnknownHostException e) {
+            Logging.log("Failed To Get User IP Address", Level.SEVERE, e);
+            throw new RuntimeException(e);
+        }
     }
     
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException {
         Config conf = new Config();
-        try {
-            conf.readConfig();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.exit(401);
-        }
+        conf.readConfig();
         new App().run();
     }
     
@@ -51,9 +58,13 @@ public class App extends TApplication {
         
         AbstractController controller = switch (toScreen) {
             case HOME -> new HomeController(root);
-            //case MESSAGES -> new MessageController(root, getCurrentUser());
+            case MESSAGES -> new MessageController(root);
             case HELP -> new HelpController(root);
             default -> throw new IllegalArgumentException("Unknown screen type:" + toScreen);
         };
+    }
+    
+    public static User getUser() {
+        return user;
     }
 }

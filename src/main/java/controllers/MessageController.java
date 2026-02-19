@@ -9,13 +9,18 @@ import models.User;
 import utils.Logging;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 
-public class MessageController extends AbstractController {
-    private final User user;
+public class MessageController extends AbstractController implements Loadable {
+    private User user;
     
-    public MessageController(TWindow root, User user) {
+    public MessageController(TWindow root) {
         super(root, Screens.MESSAGES);
+    }
+    
+    @Override
+    public void load(User user) {
         this.user = user;
     }
     
@@ -60,17 +65,17 @@ public class MessageController extends AbstractController {
                     panelWidth, panelHeight
             );
             
-            StringBuilder members = new StringBuilder();
-            ArrayList<User> users = new ArrayList<>(chat.getUsers());
-            for (int j = 0; j < users.size(); j++) {
-                members.append(users.get(j).getUsername());
+            StringBuilder memberIPs = new StringBuilder();
+            ArrayList<String> userIPs = new ArrayList<>(chat.getUsers());
+            for (int j = 0; j < userIPs.size(); j++) {
+                memberIPs.append(userIPs.get(j));
                 
-                if (j != users.size())
-                    members.append(',');
+                if (j != userIPs.size() - 1)
+                    memberIPs.append(',');
             }
             
-            panel.addLabel("Members: " + members, 2, 1);
-            panel.addLabel("Last Message Preview: " + chat.getMessages().getLast(), 2, 2);
+            panel.addLabel("Members: " + memberIPs, 2, 1);
+            panel.addLabel("Last Message: " + chat.getMessages().getLast().text(), 2, 2);
             
             int finalI = i;
             panel.addButton(
@@ -143,15 +148,12 @@ public class MessageController extends AbstractController {
                             return;
                         }
                         
-                        ArrayList<User> members = new ArrayList<>();
-                        for (String ip : ips.getText().split(","))
-                            //members.add(getUserFromServer(ip)); // ???
-                        members.add(user);
-                        
+                        ArrayList<String> members = new ArrayList<>(Arrays.asList(receivers));
                         Chat newChat = new Chat(
                                 chats.size(),
                                 members,
-                                messageBox.getText().strip()
+                                messageBox.getText().strip(),
+                                user
                         );
                         // TODO chat creation and message send action
                     }
