@@ -1,5 +1,6 @@
 package controllers;
 
+import app.App;
 import jexer.TLabel;
 import jexer.TWidget;
 import jexer.TWindow;
@@ -37,6 +38,11 @@ public abstract class AbstractController {
                 0,  // changed later
                 root.getScreen().getHeight() / 2 - 1
         );
+        
+        if (this instanceof Loadable l)
+            l.load(App.getUser());
+        
+        show();
     }
     
     /**

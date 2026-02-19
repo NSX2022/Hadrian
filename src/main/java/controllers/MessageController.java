@@ -12,14 +12,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 
-public class MessageController extends AbstractController {
-    private final User user;
+public class MessageController extends AbstractController implements Loadable {
+    private User user;
     
-    public MessageController(TWindow root, User user) {
+    public MessageController(TWindow root) {
         super(root, Screens.MESSAGES);
+    }
+    
+    @Override
+    public void load(User user) {
         this.user = user;
-        
-        show();
     }
     
     @Override
