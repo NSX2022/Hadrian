@@ -1,5 +1,8 @@
 package models;
 
+import tutorial.Tutorial;
+
+import java.net.InetAddress;
 import java.util.LinkedHashSet;
 
 /**
@@ -13,6 +16,15 @@ public class User {
         this.ip = ip;
         this.username = username;
         chats = new LinkedHashSet<>();
+        
+        new Tutorial(
+                this,
+                new User(
+                        InetAddress.getLoopbackAddress().getHostAddress(),
+                        "TutorialBot",
+                        null
+                )
+        );
     }
     
     public User(String ip, String username, LinkedHashSet<Chat> chats) {
