@@ -35,7 +35,7 @@ public abstract class AbstractController {
         
         notifLabel = root.addLabel(
                 "",
-                0,  // changed later
+                0,  // dynamically changes later
                 root.getScreen().getHeight() / 2 - 1
         );
         
@@ -49,13 +49,17 @@ public abstract class AbstractController {
      * Abstract method required for every controller class
      * <p>
      * Creates the entire UI for each page, excluding certain elements required for
-     * all pages that are already created in {@link #AbstractController(TWindow, Screens)}
+     * all pages that are already created in {@link #AbstractController(TWindow, Screens)}.
+     *
+     * @see #hide()
      */
     protected abstract void show();
     
     /**
      * Removes all page elements from {@code root}, essentially closing the page,
-     * so a new one to be displayed in its place.
+     * so a new one to be displayed in its place. Opposite of {@code show()}
+     *
+     * @see #show()
      */
     public void hide() {
         for (TWidget child : new ArrayList<>(root.getChildren()))
