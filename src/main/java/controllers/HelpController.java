@@ -1,37 +1,23 @@
 package controllers;
 
 import app.App;
-import jexer.TAction;
-import jexer.TWindow;
-import jexer.backend.Screen;
 import models.Screens;
-import utils.Logging;
 
-import java.util.logging.Level;
+import javax.swing.*;
 
 public class HelpController extends AbstractController {
-    public HelpController(TWindow root) {
-        super(root, Screens.HELP);
+    private JPanel contentPanel;
+    private JButton backButton;
+    private JList<String> helpMessagesList;
+    
+    public HelpController(JFrame appFrame) {
+        super(appFrame, Screens.HELP);
+        
+        backButton.addActionListener(actionEvent -> App.changeScreen(Screens.HOME));
     }
     
     @Override
-    protected void show() {
-        int menuX = 4, menuY = 5;
-        Screen screen = root.getScreen();
-        int width = screen.getWidth(), height = screen.getHeight();
-        
-        root.addButton(
-                "< Back",
-                menuX, menuY,
-                new TAction() {
-                    @Override
-                    public void DO() {
-                        App.changeScreen(HelpController.this, Screens.HOME);
-                        Logging.log("Returning To Home Page", Level.INFO);
-                    }
-                }
-        );
-        
-        // TODO add page elements
+    protected JPanel getContentPanel() {
+        return contentPanel;
     }
 }

@@ -1,14 +1,8 @@
 package controllers;
 
-import app.App;
-import jexer.TLabel;
-import jexer.TWidget;
-import jexer.TWindow;
 import models.Screens;
-import utils.Logging;
 
-import java.util.ArrayList;
-import java.util.logging.Level;
+import javax.swing.*;
 
 /**
  * Abstract base classes for shared controller logic.
@@ -19,75 +13,46 @@ import java.util.logging.Level;
  * required methods, common functionality, or reusable logic for
  * concrete page controllers.
  */
-public abstract class AbstractController {
-    protected TWindow root;
-    public Screens screen;
-    protected TLabel notifLabel;
+public abstract class AbstractController extends JPanel {
+    protected final Screens screen;
+    private final JFrame appFrame;
     
-    public AbstractController(TWindow root, Screens screen) {
-        this.root = root;
+    public AbstractController(JFrame appFrame, Screens screen) {
+        this.appFrame = appFrame;
         this.screen = screen;
         
-        root.addLabel(
-                "# " + screen.name(),
-                2, 1
-        );
-        
-        notifLabel = root.addLabel(
-                "",
-                0,  // dynamically changes later
-                root.getScreen().getHeight() / 2 - 1
-        );
-        
-        if (this instanceof Loadable l)
-            l.load(App.getUser());
-        
-        show();
+        this.appFrame.setTitle("Hadrian | " + screen.name());
     }
     
-    /**
-     * Abstract method required for every controller class
-     * <p>
-     * Creates the entire UI for each page, excluding certain elements required for
-     * all pages that are already created in {@link #AbstractController(TWindow, Screens)}.
-     *
-     * @see #hide()
-     */
-    protected abstract void show();
-    
-    /**
-     * Removes all page elements from {@code root}, essentially closing the page,
-     * so a new one to be displayed in its place. Opposite of {@code show()}
-     *
-     * @see #show()
-     */
-    public void hide() {
-        for (TWidget child : new ArrayList<>(root.getChildren()))
-            child.remove();
+    public void init() {
+        add(getContentPanel());
+        this.appFrame.setContentPane(this);
     }
     
-    /**
-     * Displays a notification message in the center of
-     * the user's screen for two seconds, then disappears.
-     * <p>
-     * Method actions run in its own thread,
-     * main program is not affected by timer.
-     *
-     * @param message message to be displayed and centered
-     */
-    public final void displayNotif(String message) {
-        new Thread(() -> {
-            notifLabel.setX((root.getScreen().getWidth() - message.length()) / 2);
-            notifLabel.setLabel(message);
-            
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                Logging.log("Failed To Sleep In Thread", Level.SEVERE, e);
-                throw new RuntimeException(e);
-            }
-            
-            notifLabel.setLabel("");
-        }).start();
-    }
+    protected abstract JPanel getContentPanel();
+
+//    /**
+//     * Displays a notification message in the center of
+//     * the user's screen for two seconds, then disappears.
+//     * <p>
+//     * Method actions run in its own thread,
+//     * main program is not affected by timer.
+//     *
+//     * @param message message to be displayed and centered
+//     */
+//    public final void displayNotif(String message) {
+//        new Thread(() -> {
+//            notifLabel.setX((root.getScreen().getWidth() - message.length()) / 2);
+//            notifLabel.setLabel(message);
+//
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                Logging.log("Failed To Sleep In Thread", Level.SEVERE, e);
+//                throw new RuntimeException(e);
+//            }
+//
+//            notifLabel.setLabel("");
+//        }).start();
+//    }
 }
