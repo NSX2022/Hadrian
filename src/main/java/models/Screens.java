@@ -2,7 +2,8 @@ package models;
 
 public enum Screens {
     HOME,
-    MESSAGES,
+    CHATS,
     SERVER,
-    HELP
+    HELP,
+    CHAT
 }

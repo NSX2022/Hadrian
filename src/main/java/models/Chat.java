@@ -36,6 +36,10 @@ public class Chat {
         return messages;
     }
     
+    public Message getLastMessage() {
+        return messages.getLast();
+    }
+    
     /**
      * Adds a user's IP address to a chat's user collection.
      *
