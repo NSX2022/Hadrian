@@ -22,7 +22,9 @@ public class ChatController extends AbstractController implements Loadable {
         memberModel = new DefaultListModel<>();
         membersList.setModel(memberModel);
         
-        backButton.addActionListener(actionEvent -> App.changeScreen(Screens.CHATS));
+        backButton.addActionListener(e -> App.changeScreen(Screens.CHATS));
+        sendButton.addActionListener(e -> sendMessage());
+        messageField.addActionListener(e -> sendMessage());
     }
 
     @Override

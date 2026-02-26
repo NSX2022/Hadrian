@@ -13,7 +13,7 @@ public class HelpController extends AbstractController {
     public HelpController(JFrame appFrame) {
         super(appFrame, Screens.HELP);
         
-        backButton.addActionListener(actionEvent -> App.changeScreen(Screens.HOME));
+        backButton.addActionListener(e -> App.changeScreen(Screens.HOME));
     }
     
     @Override

@@ -17,9 +17,9 @@ public class HomeController extends AbstractController {
     public HomeController(JFrame appFrame) {
         super(appFrame, Screens.HOME);
         
-        chatsButton.addActionListener(actionEvent -> App.changeScreen(Screens.CHATS));
-        helpButton.addActionListener(actionEvent -> App.changeScreen(Screens.HELP));
-        exitButton.addActionListener(actionEvent -> System.exit(0));
+        chatsButton.addActionListener(e -> App.changeScreen(Screens.CHATS));
+        helpButton.addActionListener(e -> App.changeScreen(Screens.HELP));
+        exitButton.addActionListener(e -> System.exit(0));
     }
     
     @Override

@@ -21,7 +21,7 @@ public final class ChatPanel extends JPanel {
         recentMessageLabel.setText(lastMessage);
         openChatButton.setText("Open Chat " + (chatIndex + 1));
         
-        openChatButton.addActionListener(actionEvent -> {
+        openChatButton.addActionListener(e -> {
             ChatController controller = new ChatController(appFrame, user.getChat(chatIndex));
             controller.init();
             controller.load(App.getUser());
