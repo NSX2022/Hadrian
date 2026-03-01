@@ -1,8 +1,10 @@
 package controllers;
 
+import app.App;
 import models.Screens;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 /**
  * Abstract base classes for shared controller logic.
@@ -22,6 +24,10 @@ public abstract class AbstractController extends JPanel {
         this.screen = screen;
         
         this.appFrame.setTitle("Hadrian | " + screen.name());
+        
+        bindKey("control Q", "quit", () -> System.exit(0));
+        bindKey("control H", "home", () -> App.changeScreen(Screens.HOME));
+        bindKey("control M", "messages", () -> App.changeScreen(Screens.CHATS));
     }
     
     public void init() {
@@ -30,6 +36,19 @@ public abstract class AbstractController extends JPanel {
     }
     
     protected abstract JPanel getContentPanel();
+    
+    protected void bindKey(String keystroke, String actionName, Runnable action) {
+        InputMap inputMap = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = this.getActionMap();
+        
+        inputMap.put(KeyStroke.getKeyStroke(keystroke), actionName);
+        actionMap.put(actionName, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                action.run();
+            }
+        });
+    }
 
 //    /**
 //     * Displays a notification message in the center of

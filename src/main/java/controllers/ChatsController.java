@@ -27,6 +27,8 @@ public class ChatsController extends AbstractController implements Loadable {
         backButton.addActionListener(e -> App.changeScreen(Screens.HOME));
         usersField.addActionListener(e -> messageArea.grabFocus());
         createChatButton.addActionListener(e -> createChat());
+        
+        bindKey("ESCAPE", "back", () -> App.changeScreen(Screens.HOME));
     }
 
     @Override

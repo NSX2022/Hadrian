@@ -14,6 +14,8 @@ public class HelpController extends AbstractController {
         super(appFrame, Screens.HELP);
         
         backButton.addActionListener(e -> App.changeScreen(Screens.HOME));
+        
+        bindKey("ESCAPE", "back", () -> App.changeScreen(Screens.HOME));
     }
     
     @Override

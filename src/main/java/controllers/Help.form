@@ -32,6 +32,12 @@
         <properties>
           <model>
             <item value="Help Messages Here..."/>
+            <item value="---"/>
+            <item value="Keybinds:"/>
+            <item value="Ctrl+Q - Quit Application"/>
+            <item value="Ctrl+H - Go To Home"/>
+            <item value="Ctrl+M - Go To Chats (Messages)"/>
+            <item value="ESC - Go To Previous Screen"/>
           </model>
         </properties>
       </component>
