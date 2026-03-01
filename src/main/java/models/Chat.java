@@ -65,9 +65,20 @@ public class Chat {
      *
      * @param text text to be added to the end of the collection
      * @see Message
+     * @see #addMessage(Message)
      */
     public void addMessage(String text, User sender) {
-        Message message = new Message(text, sender);
+        addMessage(new Message(text, sender));
+    }
+    
+    /**
+     * Adds a message object to the end of the chat's message collection
+     *
+     * @param message message object to be added to chat's message collection
+     * @see Message
+     * @see #addMessage(String, User)
+     */
+    public void addMessage(Message message) {
         messages.add(message);
     }
 }

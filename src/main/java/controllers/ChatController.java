@@ -4,6 +4,7 @@ import app.App;
 import models.*;
 
 import javax.swing.*;
+import java.util.LinkedList;
 
 public class ChatController extends AbstractController implements Loadable {
     private JPanel contentPanel;
@@ -11,9 +12,12 @@ public class ChatController extends AbstractController implements Loadable {
     private final Chat data;
     private JButton backButton;
     private JLabel chatNameLabel;
-    private JPanel messagesScrollPanel;
     private final DefaultListModel<String> memberModel;
     private JList<String> membersList;
+    private final DefaultListModel<Message> messageModel;
+    private JList<Message> messageList;
+    private JTextField messageField;
+    private JButton sendButton;
     
     public ChatController(JFrame appFrame, Chat data) {
         super(appFrame, Screens.CHAT);
@@ -21,6 +25,9 @@ public class ChatController extends AbstractController implements Loadable {
         
         memberModel = new DefaultListModel<>();
         membersList.setModel(memberModel);
+        messageModel = new DefaultListModel<>();
+        messageList.setModel(messageModel);
+        messageList.setCellRenderer(new MessageCellRenderer());
         
         backButton.addActionListener(e -> App.changeScreen(Screens.CHATS));
         sendButton.addActionListener(e -> sendMessage());
@@ -31,14 +38,16 @@ public class ChatController extends AbstractController implements Loadable {
     public void load(User user) {
         this.user = user;
         
-        for (int i = 0; i < data.getMessages().size(); i++) {
-            Message message = data.getMessages().get(i);
-            MessagePanel panel = new MessagePanel(message.sender().getUsername(), message.text());
-            messagesScrollPanel.add(panel, i);
-        }
+        // load messages
+        LinkedList<Message> messages = data.getMessages();
+        for (int i = 0; i < messages.size(); i++)
+            messageModel.add(i, messages.get(i));
         
+        // load users
         for (String member : data.getUsers())
             memberModel.addElement(member);
+        
+        App.draw();
     }
     
     @Override
@@ -46,8 +55,14 @@ public class ChatController extends AbstractController implements Loadable {
         return contentPanel;
     }
 
-//    private void sendMessage(String message) {
-//        data.addMessage(message, user);
-//        chatModel.addElement(new MessagePanel(user.getUsername(), message));
-//    }
+    private void sendMessage() {
+        Message message = new Message(messageField.getText(), user);
+        
+        data.addMessage(message);
+        messageModel.add(messageModel.size(), message);
+        
+        messageField.setText("");
+        
+        App.draw();
+    }
 }
