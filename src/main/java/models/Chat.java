@@ -1,6 +1,5 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -8,24 +7,18 @@ import java.util.LinkedList;
  * Dataclass representing a singular chat.
  */
 public class Chat {
-    private final int localID;
     private final HashSet<String> users;
     private final LinkedList<Message> messages;
     
-    public Chat(int localID, ArrayList<String> members, String firstMessage, User user) {
-        this.localID = localID;
-        users = new HashSet<>(members);
-        if (!members.contains(user.getIp()))
-            users.add(user.getIp());
+    public Chat(HashSet<String> users, String firstMessage, User user) {
+        this.users = users;
+        
+        users.add(user.getIp());
         messages = new LinkedList<>();
         
         addMessage(firstMessage, user);
         
         user.addChat(this);
-    }
-    
-    public int getId() {
-        return localID;
     }
     
     public HashSet<String> getUsers() {
