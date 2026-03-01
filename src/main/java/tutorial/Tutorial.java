@@ -3,25 +3,18 @@ package tutorial;
 import models.Chat;
 import models.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.*;
+import java.util.HashSet;
+import java.util.List;
 
 public final class Tutorial extends Chat {
-    private final User tutorialBot;
-    
     public Tutorial(User user, User tutorialBot) {
         super(
-                0,
-                new ArrayList<>(Arrays.asList(user.getIp(), tutorialBot.getIp())),
+                new HashSet<>(List.of(user.getIp(), tutorialBot.getIp())),
                 "This is the tutorial chat.",
                 user
         );
-        this.tutorialBot = tutorialBot;
         
-        fillChat();
-    }
-    
-    private void fillChat() {
         addMessage("Nothing you send here leaves your computer.", tutorialBot);
         addMessage("You can type anything and press [Enter] to send it.", tutorialBot);
         addMessage("Try sending me a message.", tutorialBot);
