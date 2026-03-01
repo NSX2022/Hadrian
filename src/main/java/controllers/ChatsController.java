@@ -7,19 +7,26 @@ import models.Screens;
 import models.User;
 
 import javax.swing.*;
+import java.util.HashSet;
+import java.util.List;
 
 public class ChatsController extends AbstractController implements Loadable {
-    private JFrame appFrame;
+    private final JFrame appFrame;
     private JPanel contentPanel;
     private User user;
     private JButton backButton;
     private JPanel chatsPanel;
+    private JTextField usersField;
+    private JTextArea messageArea;
+    private JButton createChatButton;
     
     public ChatsController(JFrame appFrame) {
         super(appFrame, Screens.CHATS);
         this.appFrame = appFrame;
         
         backButton.addActionListener(e -> App.changeScreen(Screens.HOME));
+        usersField.addActionListener(e -> messageArea.grabFocus());
+        createChatButton.addActionListener(e -> createChat());
     }
 
     @Override
@@ -36,6 +43,18 @@ public class ChatsController extends AbstractController implements Loadable {
     @Override
     protected JPanel getContentPanel() {
         return contentPanel;
+    }
+    
+    private void createChat() {
+        HashSet<String> users = new HashSet<>(List.of(usersField.getText().split(",")));
+        Chat chat = new Chat(users, messageArea.getText(), user);
+        user.addChat(chat);
+        
+        ChatController controller = new ChatController(appFrame, chat);
+        controller.init();
+        controller.load(user);
+        
+        App.draw();
     }
     
 //    @Override
