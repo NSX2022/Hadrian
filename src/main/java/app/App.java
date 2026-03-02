@@ -11,12 +11,14 @@ import java.io.FileNotFoundException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
+import com.formdev.flatlaf.FlatDarkLaf;
+
 
 public final class App {
     private static User user;
     private static JFrame frame;
     
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedLookAndFeelException {
         Config conf = new Config();
         conf.readConfig();
         
@@ -27,6 +29,8 @@ public final class App {
             Logging.log("Failed To Get User IP Address", Level.SEVERE, e);
             throw new RuntimeException(e);
         }
+        
+        FlatDarkLaf.setup();  // Flat-Laf Dark Application Theme
         
         frame = initJFrame();
     }
