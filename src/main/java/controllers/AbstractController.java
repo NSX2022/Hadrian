@@ -4,6 +4,7 @@ import app.App;
 import models.Screens;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 /**
@@ -31,8 +32,9 @@ public abstract class AbstractController extends JPanel {
     }
     
     public void init() {
+        setLayout(new BorderLayout());
         add(getContentPanel());
-        this.appFrame.setContentPane(this);
+        appFrame.setContentPane(this);
     }
     
     protected abstract JPanel getContentPanel();

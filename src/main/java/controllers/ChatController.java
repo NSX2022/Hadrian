@@ -11,7 +11,6 @@ public class ChatController extends AbstractController implements Loadable {
     private User user;
     private final Chat data;
     private JButton backButton;
-    private JLabel chatNameLabel;
     private final DefaultListModel<String> memberModel;
     private JList<String> membersList;
     private final DefaultListModel<Message> messageModel;
