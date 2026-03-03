@@ -37,13 +37,7 @@ public final class ChatPanel extends JPanel {
         membersArray = members.toArray(membersArray);
         
         for (int i = 0; i < membersArray.length; i++) {
-            String member = membersArray[i];
-            if (membersString.length() + member.length() >= membersLabel.getMaximumSize().width) {
-                membersString.append("...");
-                break;
-            }
-            
-            membersString.append(member);
+            membersString.append(membersArray[i]);
             
             if (i != membersArray.length - 1)
                 membersString.append(", ");
