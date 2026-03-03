@@ -18,20 +18,27 @@ public class Primes {
      * @param digits Number representing the length of each large prime number
      * @return An array containing only two large prime numbers
      */
-    public static long[] generatePrimes(long digits) {
-        // Naive implementation
+    public static BigInteger[] generatePrimes(int digits) {
         SecureRandom secRand = new SecureRandom();
-        
-        long[] toRet = { 4, 4 };  // initialize both numbers as the first non-prime numbers, to fail isPrime() check
-        
-        long digitMin = (long) Math.pow(10, digits), digitMax = 9 * digitMin;
-        
-        while (!isPrime(toRet[0]))
-            toRet[0] = secRand.nextLong(digitMin, digitMax);
-        
-        while (!isPrime(toRet[1]))
-            toRet[1] = secRand.nextLong(digitMin, digitMax);
-        
+
+
+        BigInteger digitMin = BigInteger.TEN.pow(digits);
+        BigInteger digitMax = BigInteger.valueOf(9).multiply(digitMin);
+
+        BigInteger[] toRet = { BigInteger.valueOf(4), BigInteger.valueOf(4) };
+
+        // Certainty = how many rounds of the approximate prime test. Change to 100 if 256 takes too long
+        // Less that 2 * (1/2^certainty) chance that the number isn't prime
+        while (!toRet[0].isProbablePrime(256))
+            toRet[0] = new BigInteger(digitMax.bitLength(), secRand)
+                    .mod(digitMax.subtract(digitMin))
+                    .add(digitMin);
+
+        while (!toRet[1].isProbablePrime(256))
+            toRet[1] = new BigInteger(digitMax.bitLength(), secRand)
+                    .mod(digitMax.subtract(digitMin))
+                    .add(digitMin);
+
         return toRet;
     }
     
@@ -41,38 +48,32 @@ public class Primes {
      * @param pubNum A very large non-prime number, that is the product of two prime numbers
      * @return Two prime numbers that produce {@code pubNum}
      */
-    public static long[] calcRoots(long pubNum) {
-        long[] toRet = { 4, 4 };  // initialize both numbers as the first non-prime numbers, to fail isPrime() check
-        
-        long digits = (long) Math.floor(Math.log10(Math.abs(pubNum))) + 1;
+    public static BigInteger[] calcRoots(BigInteger pubNum) {
+        BigInteger digits = BigInteger.valueOf(
+                (long) Math.floor(Math.log10(pubNum.abs().doubleValue())) + 1
+        );
+
+        BigInteger digitMin = BigInteger.TEN.pow(digits.intValue());
+        BigInteger digitMax = BigInteger.valueOf(9).multiply(digitMin);
+
         SecureRandom secRand = new SecureRandom();
-        
-        while (toRet[0] * toRet[1] != pubNum) {
-            long digitMin = (long) Math.pow(10, digits), digitMax = 9 * digitMin;
-            
-            while (!isPrime(toRet[0]))
-                toRet[0] = secRand.nextLong(digitMin, digitMax);
-            
-            while (!isPrime(toRet[1]))
-                toRet[1] = secRand.nextLong(digitMin, digitMax);
+        BigInteger[] toRet = { BigInteger.valueOf(4), BigInteger.valueOf(4) };
+
+        while (!toRet[0].multiply(toRet[1]).equals(pubNum)) {
+            while (!toRet[0].isProbablePrime(100))
+                toRet[0] = new BigInteger(digitMax.bitLength(), secRand)
+                        .mod(digitMax.subtract(digitMin))
+                        .add(digitMin);
+
+            while (!toRet[1].isProbablePrime(100))
+                toRet[1] = new BigInteger(digitMax.bitLength(), secRand)
+                        .mod(digitMax.subtract(digitMin))
+                        .add(digitMin);
         }
-        
+
         return toRet;
     }
-    
-    
-    /**
-     * Check if {@code number} parameter is a prime number
-     *
-     * @param number large number to prime check
-     * @return true if {@code number} is a prime number, false otherwise
-     */
-    public static boolean isPrime(long number) {
-        for (int i = 2; i <= number / i; i++)
-            if (number % i == 0)
-                return false;
-        return true;
-    }
+
     
     /**
      * Generate an extremely large integer between the given start and end values, as a BigInteger object.
