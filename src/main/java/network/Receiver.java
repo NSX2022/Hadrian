@@ -6,6 +6,8 @@ import utils.Primes;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
@@ -55,8 +57,8 @@ public class Receiver {
                 //TODO Check message header, Send + check pub_num et al, Decrypt, get + send confirmation/username
                 try {
                     if (this.open){
-                        long[] factors = Primes.generatePrimes(5);
-                        long pubNum = factors[0] * factors[1];
+                        BigInteger[] factors = Primes.generatePrimes(5);
+                        BigInteger pubNum = factors[0].multiply(factors[1]);
 
                         byte[] buffer = new byte[conf.getMaxBytesPerMessage()];
                         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);

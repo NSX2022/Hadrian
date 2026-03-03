@@ -1,14 +1,18 @@
 import utils.*;
 
+import java.math.BigInteger;
+import java.util.Objects;
+
 public class TestPrimes {
 
     public static void main(String[] args){
-        long[] p = Primes.generatePrimes(7);
-        assert Primes.isPrime(p[0]) && Primes.isPrime(p[1]);
+        BigInteger[] p = Primes.generatePrimes(1005);
+        BigInteger sum = p[0].multiply(p[1]);
 
-        System.out.println("Prime1: "+ p[0] +" Prime2: "+ p[1] +" Public Num: "+ p[0] * p[1]);
+        System.out.println("Prime1: "+ p[0] +"\nPrime2: "+ p[1] +"\nPublic Num: "+ sum);
 
-        assert Primes.calcRoots(p[0] * p[1])[0] *
-                Primes.calcRoots(p[0] * p[1])[1] == (p[0] * p[1]);
+        BigInteger[] b = {p[0], p[1]};
+        assert (Objects.equals(Primes.calcRoots(sum), b));
+
     }
 }
