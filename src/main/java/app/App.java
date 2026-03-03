@@ -11,14 +11,34 @@ import java.io.FileNotFoundException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
+
 import com.formdev.flatlaf.FlatDarkLaf;
 
-
+/**
+ * Instantiate and run the App class to start the Hadrian application
+ *
+ * @see #run()
+ */
 public final class App {
     private static User user;
     private static JFrame frame;
     
-    public static void main(String[] args) throws FileNotFoundException, UnsupportedLookAndFeelException {
+    public static void main(String[] args) {
+        try {
+            run();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
+     * Entry point for Hadrian application
+     * <p>
+     * Initializes the main application window, data loading, and setup process
+     *
+     * @throws FileNotFoundException if config file cannot be found
+     */
+    public static void run() throws FileNotFoundException {
         Config conf = new Config();
         conf.readConfig();
         
@@ -35,6 +55,18 @@ public final class App {
         frame = initJFrame();
     }
     
+    /**
+     * Creates the home page of the application
+     * <p>
+     * Organizational method to initialize application JFrame - meant to reduce constructor length
+     * <p>
+     * Sets JFrame size to be the maximum window size based on graphics environment.
+     *
+     * @return created and fully initialized JFrame
+     * @see HomeController
+     * @see JFrame
+     * @see GraphicsEnvironment
+     */
     private static JFrame initJFrame() {
         JFrame appFrame = new JFrame("Hadrian");
         new HomeController(appFrame).init();
@@ -53,7 +85,18 @@ public final class App {
         
         return appFrame;
     }
-
+    
+    /**
+     * Change application page to desired screen using an enum.
+     * <p>
+     * Creates page, initializes page, loads user data, redraws page, in sequence.
+     *
+     * @param screen screen to change to as an enum
+     * @see Screens
+     * @see AbstractController#init()
+     * @see Loadable#load(User)
+     * @see #draw()
+     */
     public static void changeScreen(Screens screen) {
         AbstractController controller = switch (screen) {
             case HOME -> new HomeController(frame);
@@ -70,6 +113,11 @@ public final class App {
         draw();
     }
     
+    /**
+     * "Redraws" the application JFrame object.
+     * <p>
+     * Displays any changes made since the last draw.
+     */
     public static void draw() {
         frame.revalidate();
         frame.repaint();

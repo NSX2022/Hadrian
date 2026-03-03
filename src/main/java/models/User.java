@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * Dataclass representing a singular user.
+ * Dataclass representing a singular user in the Hadrian application.
  */
 public class User {
     private String ip, username;
@@ -67,6 +67,4 @@ public class User {
         chats.remove(index);
     }
     // endregion
-    
-    // TODO fill in any more user data
 }

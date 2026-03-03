@@ -12,6 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 
+/**
+ * A class representing the entire chats page in the Hadrian application.
+ * <p>
+ * Handles creation of new chats and displaying existing chats
+ */
 public class ChatsController extends AbstractController implements Loadable {
     private final JFrame appFrame;
     private JPanel contentPanel;
@@ -49,6 +54,9 @@ public class ChatsController extends AbstractController implements Loadable {
         return contentPanel;
     }
     
+    /**
+     * Method handling the creation of a new chat only if select fields have provided valid information.
+     */
     private void createChat() {
         if (invalidFields())
             return;
@@ -66,6 +74,14 @@ public class ChatsController extends AbstractController implements Loadable {
         Logging.log("Created New Chat With Members: " + usersField.getText(), Level.INFO);
     }
     
+    /**
+     * Checks if users field and message field are valid.
+     * <p>
+     * Checks if either field is empty, checks if users field contains valid IP addresses using regex.
+     *
+     * @return true if fields are valid, false otherwise
+     * @see #createChat()
+     */
     private boolean invalidFields() {
         if (usersField.getText().isBlank() || messageArea.getText().isBlank()) {
             // TODO blank field notification

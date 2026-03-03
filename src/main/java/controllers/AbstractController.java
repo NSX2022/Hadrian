@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
  * across controllers in the Hadrian application - it provides
  * required methods, common functionality, or reusable logic for
  * concrete page controllers.
+ *
+ * @see controllers
  */
 public abstract class AbstractController extends JPanel {
     protected final Screens screen;
@@ -26,19 +28,50 @@ public abstract class AbstractController extends JPanel {
         
         this.appFrame.setTitle("Hadrian | " + screen.name());
         
+        setUniversalKeybinds();
+    }
+    
+    /**
+     * Define keybinds that will work universally throughout the application.
+     *
+     * @see #bindKey(String, String, Runnable)
+     */
+    private void setUniversalKeybinds() {
         bindKey("control Q", "quit", () -> System.exit(0));
         bindKey("control H", "home", () -> App.changeScreen(Screens.HOME));
         bindKey("control M", "messages", () -> App.changeScreen(Screens.CHATS));
     }
     
+    /**
+     * Initialize controller layout and content, sets the application window's
+     * contentPane as the current controller JPanel, essentially switching pages.
+     * <p>
+     * This is separate from constructor because Java Swing .form files are
+     * initialized after constructor finishes.
+     */
     public void init() {
         setLayout(new BorderLayout());
         add(getContentPanel());
         appFrame.setContentPane(this);
     }
     
+    /**
+     * Gets the contentPanel from the child class, used during the initialization process in this parent class.
+     * <p>
+     * This exists because Java Swing content panels are initialized after constructors finish.
+     *
+     * @return JPanel object representing the entire controller page, added to application window
+     * @see #init()
+     */
     protected abstract JPanel getContentPanel();
     
+    /**
+     * Sets a keybind for the current controller.
+     *
+     * @param keystroke key or key pattern to trigger an action
+     * @param actionName a unique name for this keystroke and action process
+     * @param action an action to run when the keybind is used
+     */
     protected void bindKey(String keystroke, String actionName, Runnable action) {
         InputMap inputMap = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = this.getActionMap();

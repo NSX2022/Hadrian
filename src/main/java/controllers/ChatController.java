@@ -2,10 +2,16 @@ package controllers;
 
 import app.App;
 import models.*;
+import models.MessageCellRenderer;
 
 import javax.swing.*;
 import java.util.LinkedList;
 
+/**
+ * A class representing a singular chat page in the Hadrian application, handling all functionality.
+ * <p>
+ * All chats should be able to function using this class
+ */
 public class ChatController extends AbstractController implements Loadable {
     private JPanel contentPanel;
     private User user;
@@ -55,7 +61,12 @@ public class ChatController extends AbstractController implements Loadable {
     protected JPanel getContentPanel() {
         return contentPanel;
     }
-
+    
+    /**
+     * Method containing all message sending functionality.
+     * <p>
+     * Updates current chat object, displays message, clears text field.
+     */
     private void sendMessage() {
         Message message = new Message(messageField.getText(), user);
         

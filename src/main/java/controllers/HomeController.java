@@ -6,7 +6,7 @@ import models.Screens;
 import javax.swing.*;
 
 /**
- * Controller for the initial "Home" page in Hadrian application.
+ * Controller for the initial home page in the Hadrian application.
  */
 public class HomeController extends AbstractController {
     private JPanel contentPanel;

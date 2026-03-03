@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
- * Dataclass representing a singular chat.
+ * Dataclass representing a singular chat in the Hadrian application.
  */
 public class Chat {
     private final HashSet<String> users;
