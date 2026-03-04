@@ -16,11 +16,13 @@ public final class MessageCellRenderer extends JPanel implements ListCellRendere
     public MessageCellRenderer() {
         setLayout(new BorderLayout());
         
+        timeLabel = new JLabel();
         senderLabel = new JLabel();
         messageLabel = new JLabel();
         
         add(senderLabel, BorderLayout.WEST);
         add(messageLabel, BorderLayout.CENTER);
+        add(timeLabel, BorderLayout.EAST);
     }
     
     /**
@@ -39,11 +41,14 @@ public final class MessageCellRenderer extends JPanel implements ListCellRendere
                                                   boolean isSelected, boolean cellHasFocus) {
         senderLabel.setText(message.sender().getUsername() + ": ");
         messageLabel.setText(message.text());
+        timeLabel.setText(message.date().toString());
         
         if (isSelected) {
             setBackground(list.getSelectionBackground());
+            timeLabel.setVisible(true);
         } else {
             setBackground(list.getBackground());
+            timeLabel.setVisible(false);
         }
         
         return this;
