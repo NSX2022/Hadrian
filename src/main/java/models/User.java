@@ -1,10 +1,9 @@
 package models;
 
-import tutorial.Tutorial;
-
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Dataclass representing a singular user in the Hadrian application.
@@ -18,14 +17,28 @@ public class User {
         this.username = username;
         chats = new HashMap<>();
         
-        new Tutorial(
-                this,
-                new User(
-                        InetAddress.getLoopbackAddress().getHostAddress(),
-                        "TutorialBot",
-                        null
-                )
+        createTutorial();
+    }
+    
+    /**
+     * Adds the initialized Hadrian tutorial to the user's chats
+     */
+    private void createTutorial() {
+        User tutorialBot = new User(
+                InetAddress.getLoopbackAddress().getHostAddress(),
+                "TutorialBot",
+                null
         );
+        
+        Chat tutorial = new Chat(
+                new HashSet<>(List.of(tutorialBot.getIp())),
+                "This is the tutorial chat.",
+                this
+        );
+        
+        tutorial.addMessage("Nothing you send here leaves your computer.", tutorialBot);
+        tutorial.addMessage("You can type anything and press [Enter] to send it.", tutorialBot);
+        tutorial.addMessage("Try sending me a message.", tutorialBot);
     }
     
     public User(String ip, String username, HashMap<Integer, Chat> chats) {
