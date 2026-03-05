@@ -1,7 +1,7 @@
 package models;
 
 import java.net.InetAddress;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -10,12 +10,12 @@ import java.util.List;
  */
 public class User {
     private String ip, username;
-    private final HashMap<Integer, Chat> chats;
+    private final ArrayList<Chat> chats;
     
     public User(String ip, String username) {  // new user
         this.ip = ip;
         this.username = username;
-        chats = new HashMap<>();
+        chats = new ArrayList<>();
         
         createTutorial();
     }
@@ -41,7 +41,7 @@ public class User {
         tutorial.addMessage("Try sending me a message.", tutorialBot);
     }
     
-    public User(String ip, String username, HashMap<Integer, Chat> chats) {
+    public User(String ip, String username, ArrayList<Chat> chats) {
         this.ip = ip;
         this.username = username;
         this.chats = chats;
@@ -64,8 +64,8 @@ public class User {
         this.username = username;
     }
     
-    public HashSet<Chat> getChats() {
-        return new HashSet<>(chats.values());
+    public ArrayList<Chat> getChats() {
+        return chats;
     }
     
     public Chat getChat(int index) {
@@ -73,7 +73,11 @@ public class User {
     }
     
     public void addChat(Chat chat) {
-        chats.put(chats.size(), chat);
+        chats.add(chat);
+    }
+    
+    public void removeChat(Chat chat) {
+        chats.remove(chat);
     }
     
     public void removeChat(int index) {

@@ -4,7 +4,6 @@ import app.App;
 import controllers.ChatController;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.HashSet;
 
 /**
@@ -16,16 +15,16 @@ public final class ChatPanel extends JPanel {
     private JLabel membersLabel;
     private JLabel recentMessageLabel;
     
-    public ChatPanel(JFrame appFrame, int chatIndex, User user, HashSet<String> members, String lastMessage) {
+    public ChatPanel(JFrame appFrame, int chatIndex, Chat chat) {
         add(contentPanel);
         
-        setMembersLabel(members);
+        setMembersLabel(chat.getUsers());
         
-        recentMessageLabel.setText(lastMessage);
+        recentMessageLabel.setText(chat.getLastMessage().text());
         openChatButton.setText("Open Chat " + (chatIndex + 1));
         
         openChatButton.addActionListener(e -> {
-            ChatController controller = new ChatController(appFrame, user.getChat(chatIndex));
+            ChatController controller = new ChatController(appFrame, chat);
             controller.init();
             controller.load(App.getUser());
             

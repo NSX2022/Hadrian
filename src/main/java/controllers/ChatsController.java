@@ -42,7 +42,7 @@ public class ChatsController extends AbstractController implements Loadable {
         
         for (int i = 0; i < user.getChats().size(); i++) {
             Chat chat = user.getChat(i);
-            ChatPanel panel = new ChatPanel(appFrame, i, user, chat.getUsers(), chat.getLastMessage().text());
+            ChatPanel panel = new ChatPanel(appFrame, i, chat);
             chatsPanel.add(panel, i);
         }
     }
@@ -61,7 +61,6 @@ public class ChatsController extends AbstractController implements Loadable {
         
         HashSet<String> users = new HashSet<>(List.of(usersField.getText().split(",")));
         Chat chat = new Chat(users, messageArea.getText(), user);
-        user.addChat(chat);
         
         ChatController controller = new ChatController(appFrame, chat);
         controller.init();
