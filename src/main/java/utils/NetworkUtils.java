@@ -1,9 +1,8 @@
 package utils;
 
-import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +15,7 @@ public class NetworkUtils {
      * Returns the address of an active Wifi interface that isn't inactive and isn't a loopback interface (e.g, localhost)
      * @return {@code byte[]} Wifi interface address
      * @throws SocketException
+     * @see #macBytesToHex(byte[])
      */
     public static byte[] getMacAddress() throws SocketException {
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
@@ -42,7 +42,12 @@ public class NetworkUtils {
         throw new SocketException("No WiFi adapter found");
     }
 
-
+    /**
+     * Returns a {@code String} representation of a Hexadecimal MAC address
+     * @param macAddress
+     * @return {@code String} Hexadecimal
+     * @see #getMacAddress()
+     */
     public static String macBytesToHex(byte[] macAddress) {
         String[] hexadecimal = new String[macAddress.length];
         for (int i = 0; i < macAddress.length; i++) {
@@ -72,7 +77,7 @@ public class NetworkUtils {
      * Returns the hash of a String {@code input}
      * @param input
      * @param hashType "SHA-256", "SHA-1", "MD5"
-     * @return hash bytes
+     * @return {@code byte[]} Hash bytes
      * @throws NoSuchAlgorithmException
      */
     public static byte[] hashString(String input, String hashType) throws NoSuchAlgorithmException {
@@ -82,4 +87,54 @@ public class NetworkUtils {
 
         return hash;
     }
+
+    /**
+     * Returns a UDP packet designed for being a part of a chain of packets
+     * @see #hashString(String, String)
+     * @return
+     */
+    public static byte[] packetFactory(PacketHeader packetHeader){
+        byte[] content = packetHeader.text().getBytes(StandardCharsets.UTF_8);
+        int size = 4 + packetHeader.hash().length
+                + 4 + packetHeader.previous_hash().length
+                + 4 // packetNum
+                + 4 // totalPackets
+                + 4 + content.length
+                ;
+        ByteBuffer builder = ByteBuffer.allocate(size);
+        // I CAST: INVOCATION CHAIN
+        builder.put(packetHeader.hash()).put(packetHeader.previous_hash()).putInt(packetHeader.packetNum())
+                .putInt(packetHeader.totalPackets()).putInt(content.length).put(content);
+
+        return builder.array();
+    }
+
+    /**
+     *
+     * @param dataArray
+     * @return
+     */
+    public static PacketHeader parseHeader(byte[] dataArray){
+        ByteBuffer buffer = ByteBuffer.wrap(dataArray);
+        int hashLen = buffer.getInt();
+        byte[] hash = new byte[hashLen];
+        buffer.get(hash);
+
+        // Don't need to specify index in getInt() because ByteBuffer advances automatically
+        int previousHashLen = buffer.getInt();
+        byte[] previousHash = new byte[previousHashLen];
+        buffer.get(previousHash);
+
+        int packetNum = buffer.getInt();
+
+        int totalPackets = buffer.getInt();
+
+        int contentLength = buffer.getInt();
+        byte[] contentData = new byte[contentLength];
+        buffer.get(contentData);
+        String content = new String(contentData, StandardCharsets.UTF_8);
+
+        return new PacketHeader(hash, previousHash, packetNum, totalPackets, content);
+    }
+
 }
