@@ -21,7 +21,10 @@ public class HomeController extends AbstractController {
         chatsButton.addActionListener(e -> App.changeScreen(Screens.CHATS));
         helpButton.addActionListener(e -> App.changeScreen(Screens.HELP));
         exitButton.addActionListener(e -> System.exit(0));
-        themeButton.addActionListener(e -> App.toggleDarkMode());
+        themeButton.addActionListener(e -> {
+            displayNotif("Color Theme Switch Will Take Affect On Page Change");
+            App.toggleDarkMode();
+        });
     }
     
     @Override

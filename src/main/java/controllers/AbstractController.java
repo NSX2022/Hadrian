@@ -2,10 +2,12 @@ package controllers;
 
 import app.App;
 import models.Screens;
+import utils.Logging;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
 
 /**
  * Abstract base classes for shared controller logic.
@@ -84,29 +86,33 @@ public abstract class AbstractController extends JPanel {
             }
         });
     }
-
-//    /**
-//     * Displays a notification message in the center of
-//     * the user's screen for two seconds, then disappears.
-//     * <p>
-//     * Method actions run in its own thread,
-//     * main program is not affected by timer.
-//     *
-//     * @param message message to be displayed and centered
-//     */
-//    public final void displayNotif(String message) {
-//        new Thread(() -> {
-//            notifLabel.setX((root.getScreen().getWidth() - message.length()) / 2);
-//            notifLabel.setLabel(message);
-//
-//            try {
-//                Thread.sleep(2000);
-//            } catch (InterruptedException e) {
-//                Logging.log("Failed To Sleep In Thread", Level.SEVERE, e);
-//                throw new RuntimeException(e);
-//            }
-//
-//            notifLabel.setLabel("");
-//        }).start();
-//    }
+    
+    /**
+     * Displays a notification message in the center bottom of
+     * the user's screen for five seconds, then disappears.
+     * <p>
+     * Method actions run in its own thread,
+     * main program is not affected by timer.
+     *
+     * @param message message to be displayed and centered
+     */
+    public void displayNotif(String message) {
+        new Thread(() -> {
+            JLabel label = new JLabel(message, SwingConstants.CENTER);
+            appFrame.add(label, BorderLayout.SOUTH);
+            App.draw();
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                Logging.log("Failed To Sleep In Thread", Level.SEVERE, e);
+                throw new RuntimeException(e);
+            } finally {
+                Logging.log(message, Level.INFO);
+            }
+            
+            appFrame.remove(label);
+            App.draw();
+        }).start();
+    }
 }

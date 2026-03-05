@@ -111,6 +111,8 @@ public final class App {
             l.load(user);
         
         draw();
+        
+        Logging.log("Switched To Page: " + screen.name(), Level.INFO);
     }
     
     /**
@@ -130,8 +132,6 @@ public final class App {
             FlatDarkLaf.setup();  // Flat-Laf Dark Application Theme
         else
             FlatLightLaf.setup();  // Flat-Laf Light Application Theme
-        
-        Logging.log("Switched color theme", Level.INFO);
     }
     
     public static User getUser() {

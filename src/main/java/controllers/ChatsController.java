@@ -5,12 +5,10 @@ import models.Chat;
 import models.ChatPanel;
 import models.Screens;
 import models.User;
-import utils.Logging;
 
 import javax.swing.*;
 import java.util.HashSet;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * A class representing the entire chats page in the Hadrian application.
@@ -71,7 +69,7 @@ public class ChatsController extends AbstractController implements Loadable {
         
         App.draw();
         
-        Logging.log("Created New Chat With Members: " + usersField.getText(), Level.INFO);
+        displayNotif("Created New Chat With Members: " + usersField.getText());
     }
     
     /**
@@ -84,8 +82,7 @@ public class ChatsController extends AbstractController implements Loadable {
      */
     private boolean invalidFields() {
         if (usersField.getText().isBlank() || messageArea.getText().isBlank()) {
-            // TODO blank field notification
-            Logging.log("One Or More Fields Are Blank", Level.WARNING);
+            displayNotif("One Or More Fields Are Blank");
             return true;
         }
         
@@ -95,8 +92,7 @@ public class ChatsController extends AbstractController implements Loadable {
                        "(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d))*$";
         
         if (!usersField.getText().matches(regex)) {
-            // TODO invalid IP listing
-            Logging.log("Invalid IP Listing", Level.WARNING);
+            displayNotif("Invalid IP Listing");
             return true;
         }
         

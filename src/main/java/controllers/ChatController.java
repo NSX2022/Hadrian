@@ -68,6 +68,11 @@ public class ChatController extends AbstractController implements Loadable {
      * Updates current chat object, displays message, clears text field.
      */
     private void sendMessage() {
+        if (messageField.getText().isBlank()) {
+            displayNotif("Cannot Send Blank Message");
+            return;
+        }
+        
         Message message = new Message(messageField.getText(), user);
         
         data.addMessage(message);
