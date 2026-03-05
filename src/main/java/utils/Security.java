@@ -2,8 +2,11 @@ package utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Security {
     //TODO Security checks (e.g, checksum check on the .jar file using jar signing)

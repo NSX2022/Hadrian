@@ -51,7 +51,7 @@ public class Receiver {
             }
             
             String messageHolder;
-            //TODO: Switch to BigDecimal, difficulty system
+            //TODO: difficulty system
             
             while (!serverThread.isInterrupted()) {
                 //TODO Check message header, Send + check pub_num et al, Decrypt, get + send confirmation/username

@@ -13,7 +13,8 @@ import java.awt.*;
 public final class MessageCellRenderer extends JPanel implements ListCellRenderer<Message> {
     private final JLabel timeLabel, senderLabel, messageLabel;
     
-    public MessageCellRenderer() {
+    public MessageCellRenderer(JLabel timeLabel) {
+        this.timeLabel = timeLabel;
         setLayout(new BorderLayout());
         
         timeLabel = new JLabel();
