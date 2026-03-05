@@ -13,6 +13,7 @@ public class HomeController extends AbstractController {
     private JButton chatsButton;
     private JButton helpButton;
     private JButton exitButton;
+    private JButton themeButton;
     
     public HomeController(JFrame appFrame) {
         super(appFrame, Screens.HOME);
@@ -20,6 +21,7 @@ public class HomeController extends AbstractController {
         chatsButton.addActionListener(e -> App.changeScreen(Screens.CHATS));
         helpButton.addActionListener(e -> App.changeScreen(Screens.HELP));
         exitButton.addActionListener(e -> System.exit(0));
+        themeButton.addActionListener(e -> App.toggleDarkMode());
     }
     
     @Override

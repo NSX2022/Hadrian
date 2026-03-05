@@ -1,5 +1,6 @@
 package app;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import controllers.*;
 import models.Screens;
 import models.User;
@@ -22,6 +23,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 public final class App {
     private static User user;
     private static JFrame frame;
+    private static boolean isDarkMode;
     
     public static void main(String[] args) {
         try {
@@ -49,8 +51,6 @@ public final class App {
             Logging.log("Failed To Get User IP Address", Level.SEVERE, e);
             throw new RuntimeException(e);
         }
-        
-        FlatDarkLaf.setup();  // Flat-Laf Dark Application Theme
         
         frame = initJFrame();
     }
@@ -121,6 +121,17 @@ public final class App {
     public static void draw() {
         frame.revalidate();
         frame.repaint();
+    }
+    
+    public static void toggleDarkMode() {
+        isDarkMode = !isDarkMode;
+        
+        if (isDarkMode)
+            FlatDarkLaf.setup();  // Flat-Laf Dark Application Theme
+        else
+            FlatLightLaf.setup();  // Flat-Laf Light Application Theme
+        
+        Logging.log("Switched color theme", Level.INFO);
     }
     
     public static User getUser() {
