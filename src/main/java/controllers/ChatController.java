@@ -3,9 +3,13 @@ package controllers;
 import app.App;
 import models.*;
 import models.MessageCellRenderer;
+import utils.Logging;
 
 import javax.swing.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
+import java.util.logging.Level;
 
 /**
  * A class representing a singular chat page in the Hadrian application, handling all functionality.
@@ -32,7 +36,7 @@ public class ChatController extends AbstractController implements Loadable {
         membersList.setModel(memberModel);
         messageModel = new DefaultListModel<>();
         messageList.setModel(messageModel);
-        messageList.setCellRenderer(new MessageCellRenderer(null));
+        messageList.setCellRenderer(new MessageCellRenderer());
         
         backButton.addActionListener(e -> App.changeScreen(Screens.CHATS));
         sendButton.addActionListener(e -> sendMessage());
@@ -40,7 +44,7 @@ public class ChatController extends AbstractController implements Loadable {
         
         bindKey("ESCAPE", "back", () -> App.changeScreen(Screens.CHATS));
     }
-
+    
     @Override
     public void load(User user) {
         this.user = user;
@@ -51,8 +55,17 @@ public class ChatController extends AbstractController implements Loadable {
             messageModel.add(i, messages.get(i));
         
         // load users
-        for (String member : data.getUsers())
-            memberModel.addElement(member);
+        for (String member : data.getUsers()) {
+            String hostName = "unknown";
+            
+            try {
+                hostName = InetAddress.getByName(member).getHostName();
+            } catch (UnknownHostException e) {
+                Logging.log("Failed To Retrieve Host Name", Level.WARNING, e);
+            } finally {
+                memberModel.addElement(hostName + " [" + member + "]");
+            }
+        }
         
         App.draw();
     }
