@@ -28,10 +28,10 @@ public final class MessageCellRenderer extends JPanel implements ListCellRendere
     /**
      * Initializes the functionality for an individual list cell.
      *
-     * @param list JList object being referenced
-     * @param message individual message cell being rendered
-     * @param index index of cell in list
-     * @param isSelected true if cell is selected (clicked), false otherwise
+     * @param list         JList object being referenced
+     * @param message      individual message cell being rendered
+     * @param index        index of cell in list
+     * @param isSelected   true if cell is selected (clicked), false otherwise
      * @param cellHasFocus true if the cell is focused, false otherwise
      * @return the current cell renderer object
      */

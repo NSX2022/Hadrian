@@ -1,5 +1,6 @@
 package app;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import controllers.*;
 import models.Screens;
@@ -12,8 +13,6 @@ import java.io.FileNotFoundException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
-
-import com.formdev.flatlaf.FlatDarkLaf;
 
 /**
  * Instantiate and run the App class to start the Hadrian application

@@ -2,7 +2,6 @@ package controllers;
 
 import app.App;
 import models.*;
-import models.MessageCellRenderer;
 import utils.Logging;
 
 import javax.swing.*;
@@ -17,13 +16,13 @@ import java.util.logging.Level;
  * All chats should be able to function using this class
  */
 public class ChatController extends AbstractController implements Loadable {
+    private final Chat data;
+    private final DefaultListModel<String> memberModel;
+    private final DefaultListModel<Message> messageModel;
     private JPanel contentPanel;
     private User user;
-    private final Chat data;
     private JButton backButton;
-    private final DefaultListModel<String> memberModel;
     private JList<String> membersList;
-    private final DefaultListModel<Message> messageModel;
     private JList<Message> messageList;
     private JTextField messageField;
     private JButton sendButton;

@@ -41,7 +41,7 @@ public final class Logging {
      * Write logs to 'app.log' with timestamps, severity level, and message.
      *
      * @param message message to be displayed in log
-     * @param level severity of message as java utility logging object
+     * @param level   severity of message as java utility logging object
      * @see Logger
      * @see Level
      * @see #log(String, Level, Exception) Exception Logging Method
@@ -56,8 +56,8 @@ public final class Logging {
      * Write error log to 'app.log' with timestamp, severity level, message, and thrown error.
      *
      * @param message message to be displayed in log
-     * @param level severity of message as java utility logging object
-     * @param error error thrown with log
+     * @param level   severity of message as java utility logging object
+     * @param error   error thrown with log
      * @see Logger
      * @see Level
      * @see #log(String, Level) Standard Logging Method

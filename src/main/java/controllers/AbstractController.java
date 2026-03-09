@@ -70,9 +70,9 @@ public abstract class AbstractController extends JPanel {
     /**
      * Sets a keybind for the current controller.
      *
-     * @param keystroke key or key pattern to trigger an action
+     * @param keystroke  key or key pattern to trigger an action
      * @param actionName a unique name for this keystroke and action process
-     * @param action an action to run when the keybind is used
+     * @param action     an action to run when the keybind is used
      */
     protected void bindKey(String keystroke, String actionName, Runnable action) {
         InputMap inputMap = this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);

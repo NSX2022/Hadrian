@@ -86,9 +86,9 @@ public class ChatsController extends AbstractController implements Loadable {
         }
         
         String regex = "^((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}" +
-                       "(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)" +
-                       "(\\s*,\\s*((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}" +
-                       "(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d))*$";
+                "(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)" +
+                "(\\s*,\\s*((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}" +
+                "(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d))*$";
         
         if (!usersField.getText().matches(regex)) {
             displayNotif("Invalid IP Listing");

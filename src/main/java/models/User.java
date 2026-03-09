@@ -9,8 +9,8 @@ import java.util.List;
  * Dataclass representing a singular user in the Hadrian application.
  */
 public class User {
-    private String ip, username;
     private final ArrayList<Chat> chats;
+    private String ip, username;
     
     public User(String ip, String username) {  // new user
         this.ip = ip;
@@ -18,6 +18,12 @@ public class User {
         chats = new ArrayList<>();
         
         createTutorial();
+    }
+    
+    public User(String ip, String username, ArrayList<Chat> chats) {
+        this.ip = ip;
+        this.username = username;
+        this.chats = chats;
     }
     
     /**
@@ -39,12 +45,6 @@ public class User {
         tutorial.addMessage("Nothing you send here leaves your computer.", tutorialBot);
         tutorial.addMessage("You can type anything and press [Enter] to send it.", tutorialBot);
         tutorial.addMessage("Try sending me a message.", tutorialBot);
-    }
-    
-    public User(String ip, String username, ArrayList<Chat> chats) {
-        this.ip = ip;
-        this.username = username;
-        this.chats = chats;
     }
     
     // region Getters/Setters
