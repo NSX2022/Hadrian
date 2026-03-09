@@ -42,6 +42,7 @@ public final class MessageCellRenderer extends JPanel implements ListCellRendere
         senderLabel.setText(message.sender().getUsername() + ": ");
         messageLabel.setText(message.text());
         timeLabel.setText(message.date().toString());
+        timeLabel.setForeground(Color.GRAY);
         
         if (isSelected) {
             setBackground(list.getSelectionBackground());
