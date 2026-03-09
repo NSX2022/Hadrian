@@ -68,6 +68,8 @@ public final class App {
      * @see GraphicsEnvironment
      */
     private static JFrame initJFrame() {
+        toggleDarkMode();
+        
         JFrame appFrame = new JFrame("Hadrian");
         new HomeController(appFrame).init();
         
