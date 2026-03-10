@@ -1,15 +1,33 @@
 package utils;
 
+import java.math.BigInteger;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Enumeration;
+import java.sql.Timestamp;
+import java.security.Security;
+
+import org.bouncycastle.crypto.AsymmetricBlockCipher;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.bouncycastle.crypto.engines.RSAEngine;
+import org.bouncycastle.crypto.generators.RSAKeyPairGenerator;
+import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
+import org.bouncycastle.crypto.params.RSAKeyGenerationParameters;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class NetworkUtils {
 
+
+    public static void GetTimestamp(String info){
+        System.out.println(info + new Timestamp((new Date()).getTime()));
+    }
 
     /**
      * Returns the address of an active Wifi interface that isn't inactive and isn't a loopback interface (e.g, localhost)
@@ -88,6 +106,46 @@ public class NetworkUtils {
         return hash;
     }
 
+    // Encryption
+
+    public static AsymmetricCipherKeyPair generateKeys() throws NoSuchAlgorithmException{
+    // Source: http://stackoverflow.com/questions/3087049/bouncy-castle-rsa-keypair-generation-using-lightweight-api
+        RSAKeyPairGenerator generator = new RSAKeyPairGenerator();
+        generator.init(new RSAKeyGenerationParameters
+                (
+                        new BigInteger("10001", 16), // publicExponent
+                        SecureRandom.getInstance("DRBG"),
+                        4096, // strength
+                        255 // certainty, change to 100 if too slow
+                ));
+
+        return generator.generateKeyPair();
+    }
+
+    public static byte[] encrypt(byte[] data, AsymmetricKeyParameter publicKey){
+        Security.addProvider(new BouncyCastleProvider());
+
+        RSAEngine engine = new RSAEngine();
+        engine.init(true, publicKey); // true if encrypting
+
+        byte[] encryptedData = engine.processBlock(data, 0, data.length);
+
+        return encryptedData;
+    }
+
+    public static byte[] decrypt(byte[] encrypted, AsymmetricKeyParameter privateKey) throws InvalidCipherTextException {
+        Security.addProvider(new BouncyCastleProvider());
+
+        AsymmetricBlockCipher engine = new RSAEngine();
+        engine.init(false, privateKey); // false for decryption
+
+        byte[] decrypted = engine.processBlock(encrypted, 0, encrypted.length);
+
+        return decrypted;
+    }
+
+    // Packets
+
     /**
      * Returns a UDP packet designed for being a part of a chain of packets
      * @see #hashString(String, String)
@@ -95,8 +153,9 @@ public class NetworkUtils {
      */
     public static byte[] packetFactory(PacketHeader packetHeader){
         byte[] content = packetHeader.text().getBytes(StandardCharsets.UTF_8);
-        int size = 4 + packetHeader.hash().length
-                + 4 + packetHeader.previous_hash().length
+        // 4 = int size, 32 = SHA-256 size
+        int size = 32 // hash
+                + 32 // previousHash
                 + 4 // packetNum
                 + 4 // totalPackets
                 + 4 + content.length
@@ -111,18 +170,17 @@ public class NetworkUtils {
 
     /**
      *
-     * @param dataArray
-     * @return
+     * @param dataArray Byte array. Used for decrypted packets
+     * @return PacketHeader record
      */
     public static PacketHeader parseHeader(byte[] dataArray){
         ByteBuffer buffer = ByteBuffer.wrap(dataArray);
-        int hashLen = buffer.getInt();
-        byte[] hash = new byte[hashLen];
+
+        // SHA-256 hashes
+        byte[] hash = new byte[32];
         buffer.get(hash);
 
-        // Don't need to specify index in getInt() because ByteBuffer advances automatically
-        int previousHashLen = buffer.getInt();
-        byte[] previousHash = new byte[previousHashLen];
+        byte[] previousHash = new byte[32];
         buffer.get(previousHash);
 
         int packetNum = buffer.getInt();
