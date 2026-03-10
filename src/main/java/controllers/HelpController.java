@@ -20,6 +20,9 @@ public class HelpController extends AbstractController {
         bindKey("ESCAPE", "back", () -> App.changeScreen(Screens.HOME));
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected JPanel getContentPanel() {
         return contentPanel;

@@ -27,6 +27,9 @@ public class HomeController extends AbstractController {
         });
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected JPanel getContentPanel() {
         return contentPanel;

@@ -44,6 +44,9 @@ public class ChatController extends AbstractController implements Loadable {
         bindKey("ESCAPE", "back", () -> App.changeScreen(Screens.CHATS));
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void load(User user) {
         this.user = user;
@@ -69,6 +72,9 @@ public class ChatController extends AbstractController implements Loadable {
         App.draw();
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected JPanel getContentPanel() {
         return contentPanel;
