@@ -19,6 +19,13 @@
             <artifactId>flatlaf</artifactId>
             <version>3.7</version>
         </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>1.83</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <properties>
