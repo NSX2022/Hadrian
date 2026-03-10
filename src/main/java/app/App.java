@@ -68,6 +68,7 @@ public final class App {
      */
     private static JFrame initJFrame() {
         toggleDarkMode();
+        UIManager.put("defaultFont", new Font("Hack FC Ligatured", Font.PLAIN, 30));
         
         JFrame appFrame = new JFrame("Hadrian");
         new HomeController(appFrame).init();
