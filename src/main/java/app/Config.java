@@ -2,9 +2,12 @@ package app;
 
 import org.json.*;
 import utils.Logging;
+import utils.NetworkUtils;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -18,13 +21,13 @@ public class Config {
     */
     
     //Default port number
-    private int port = 9090, maxBytesPerMessage = 1024;
+    private int port = 9090;
     private String[] ipBlacklist, macBlacklist, ipWhitelist, macWhitelist;
     //Whether or not to display the IP address in the TUI
     private boolean hideIp = true;
-    private String username = "Anon";
+    private String username = InetAddress.getLocalHost().getHostName();
     
-    public Config() {
+    public Config() throws UnknownHostException {
         //TODO Create default values if the file does not exist
     }
     
@@ -54,7 +57,6 @@ public class Config {
         macWhitelist = jsonObject.getJSONArray("macWhitelist").toList().toArray(new String[0]);
         
         hideIp = jsonObject.getBoolean("hideIp");
-        maxBytesPerMessage = jsonObject.getInt("maxBytesPerMessage");
         username = jsonObject.getString("username");
     }
     
@@ -88,13 +90,5 @@ public class Config {
     
     public void setHideIp(boolean hideIp) {
         this.hideIp = hideIp;
-    }
-    
-    public int getMaxBytesPerMessage() {
-        return maxBytesPerMessage;
-    }
-    
-    public void setMaxBytesPerMessage(int maxBytesPerMessage) {
-        this.maxBytesPerMessage = maxBytesPerMessage;
     }
 }

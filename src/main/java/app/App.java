@@ -39,7 +39,7 @@ public final class App {
      *
      * @throws FileNotFoundException if config file cannot be found
      */
-    public static void run() throws FileNotFoundException {
+    public static void run() throws FileNotFoundException, UnknownHostException {
         Config conf = new Config();
         conf.readConfig();
         

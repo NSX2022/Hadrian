@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class SocketTest {
     private static Config conf;
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, UnknownHostException {
         conf = new Config();
         try {
             conf.readConfig();
