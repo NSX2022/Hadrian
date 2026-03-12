@@ -1,21 +1,37 @@
 package controllers;
 
 import app.App;
-import models.User;
+import models.Screens;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import testingClasses.ReflectionUtils;
+import testingClasses.AbstractTest;
 
-import javax.swing.*;
-
-abstract class AbstractTestController<T extends AbstractController> {
-    protected final String TEST_MESSAGE = "Message Test";
+abstract class AbstractTestController<T extends AbstractController> extends AbstractTest {
     protected T controller;
-    protected User user;
-    protected JFrame frame;
     
-    public AbstractTestController() throws NoSuchFieldException, IllegalAccessException {
-        user = new User(null, null);
-        frame = new JFrame();
-        
-        ReflectionUtils.setPrivate(App.class, "frame", frame);
+    @BeforeAll
+    static void setUp() throws NoSuchFieldException {
+        ReflectionUtils.setPrivateStatic(App.class, "frame", frame);
+    }
+    
+    @BeforeEach
+    void initController() {
+        createController();
+    }
+    
+    protected abstract void createController();
+    
+    @Test
+    void contentPanel() {
+        assert controller.getContentPanel() != null;
+    }
+    
+    @Test
+    void title() throws NoSuchFieldException {
+        Screens screen = (Screens) ReflectionUtils.getPrivateInstance(controller, "screen");
+        String title = frame.getTitle();
+        assert title.contains(screen.name()) && title.contains("Hadrian");
     }
 }

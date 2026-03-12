@@ -11,9 +11,8 @@ import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 
 class ChatsControllerTest extends AbstractTestController<ChatsController> {
-    public ChatsControllerTest() throws NoSuchFieldException, IllegalAccessException {
-        super();
-        
+    @Override
+    protected void createController() {
         controller = new ChatsController(frame);
         controller.load(user);
     }
@@ -62,6 +61,6 @@ class ChatsControllerTest extends AbstractTestController<ChatsController> {
                 controller,
                 "invalidFields",
                 new Class[0]
-        ) instanceof Boolean invalid && invalid;
+        ) instanceof Boolean isInvalid && isInvalid;
     }
 }

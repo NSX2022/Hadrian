@@ -1,24 +1,14 @@
 package models;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import testingClasses.AbstractTest;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-class UserTest {
-    private static User user;
-    
-    @BeforeAll
-    static void setup() throws UnknownHostException {
-        user = new User(
-                InetAddress.getLocalHost().getHostAddress(),
-                InetAddress.getLocalHost().getHostName()
-        );
-    }
-    
+class UserTest extends AbstractTest {
     @Test
     void tutorial() {
         assert user.getChats().size() == 1;

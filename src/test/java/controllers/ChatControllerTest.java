@@ -2,6 +2,7 @@ package controllers;
 
 import models.Chat;
 import models.Message;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import testingClasses.ReflectionUtils;
 
@@ -9,12 +10,15 @@ import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 
 class ChatControllerTest extends AbstractTestController<ChatController> {
-    private final Chat chat;
+    private static Chat chat;
     
-    public ChatControllerTest() throws NoSuchFieldException, IllegalAccessException {
-        super();
-        
+    @BeforeAll
+    static void setUp() {
         chat = user.getChat(0);
+    }
+    
+    @Override
+    protected void createController() {
         controller = new ChatController(frame, chat);
         controller.load(user);
     }
