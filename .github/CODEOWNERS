@@ -1,0 +1,20 @@
+*                                   @NedStark @CalciumKing
+
+.github/                            @CalciumKing
+
+src/main/java/app/App.java          @CalciumKing
+src/main/java/app/Config.java       @NedStark @CalciumKing
+
+src/main/java/controllers/          @CalciumKing
+
+src/main/java/models/               @CalciumKing
+
+src/main/java/network/              @NedStark
+
+src/main/java/utils/                @NedStark
+src/main/java/utils/Logging.java    @CalciumKing
+
+src/main/resources/                 @NedStark
+
+README.md                           @CalciumKing
+INSTALL.md                          @CalciumKing
