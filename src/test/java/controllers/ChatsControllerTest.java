@@ -8,7 +8,6 @@ import testingClasses.ReflectionUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
 
 class ChatsControllerTest extends AbstractTestController<ChatsController> {
     @Override
@@ -18,8 +17,8 @@ class ChatsControllerTest extends AbstractTestController<ChatsController> {
     }
     
     @Test
-    void chatsPanel() throws NoSuchFieldException, IllegalAccessException {
-        JPanel chatsPanel = (JPanel) ReflectionUtils.getPrivate(controller, "chatsPanel");
+    void chatsPanel() throws NoSuchFieldException {
+        JPanel chatsPanel = (JPanel) ReflectionUtils.getPrivateInstance(controller, "chatsPanel");
         
         int count = 0;
         for (Component component : chatsPanel.getComponents())
@@ -30,14 +29,13 @@ class ChatsControllerTest extends AbstractTestController<ChatsController> {
     }
     
     @Test
-    void createChat() throws NoSuchFieldException, IllegalAccessException,
-                             InvocationTargetException, NoSuchMethodException {
-        JTextField usersField = (JTextField) ReflectionUtils.getPrivate(controller, "usersField");
-        JTextArea messageArea = (JTextArea) ReflectionUtils.getPrivate(controller, "messageArea");
+    void createChat() throws NoSuchFieldException, NoSuchMethodException {
+        JTextField usersField = (JTextField) ReflectionUtils.getPrivateInstance(controller, "usersField");
+        JTextArea messageArea = (JTextArea) ReflectionUtils.getPrivateInstance(controller, "messageArea");
         
         usersField.setText("1.1.1.1, 2.2.2.2");
         messageArea.setText(TEST_MESSAGE);
-        ReflectionUtils.invokePrivate(controller, "createChat", new Class[0]);
+        ReflectionUtils.invokePrivateInstance(controller, "createChat", new Class[0]);
         
         assert user.getChats().size() == 2;
     }
@@ -49,15 +47,14 @@ class ChatsControllerTest extends AbstractTestController<ChatsController> {
             "1.1.1.1 2.2.2.2,Message Test",
             "255.255.256.255,Message Test"
     })
-    void createChatErrors(String users, String message) throws NoSuchFieldException, IllegalAccessException,
-                                                               InvocationTargetException, NoSuchMethodException {
-        JTextField usersField = (JTextField) ReflectionUtils.getPrivate(controller, "usersField");
-        JTextArea messageArea = (JTextArea) ReflectionUtils.getPrivate(controller, "messageArea");
+    void createChatErrors(String users, String message) throws NoSuchFieldException, NoSuchMethodException {
+        JTextField usersField = (JTextField) ReflectionUtils.getPrivateInstance(controller, "usersField");
+        JTextArea messageArea = (JTextArea) ReflectionUtils.getPrivateInstance(controller, "messageArea");
         
         usersField.setText(users);
         messageArea.setText(message);
         
-        assert ReflectionUtils.invokePrivate(
+        assert ReflectionUtils.invokePrivateInstance(
                 controller,
                 "invalidFields",
                 new Class[0]

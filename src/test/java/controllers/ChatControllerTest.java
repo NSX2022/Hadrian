@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import testingClasses.ReflectionUtils;
 
 import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
 
 class ChatControllerTest extends AbstractTestController<ChatController> {
     private static Chat chat;
@@ -24,25 +23,24 @@ class ChatControllerTest extends AbstractTestController<ChatController> {
     }
     
     @Test
-    void members() throws NoSuchFieldException, IllegalAccessException {
+    void members() throws NoSuchFieldException {
         DefaultListModel<String> memberModel =
-                (DefaultListModel<String>) ReflectionUtils.getPrivate(controller, "memberModel");
+                (DefaultListModel<String>) ReflectionUtils.getPrivateInstance(controller, "memberModel");
         assert memberModel.size() == chat.getUsers().size();
     }
     
     @Test
-    void messages() throws NoSuchFieldException, IllegalAccessException {
+    void messages() throws NoSuchFieldException {
         DefaultListModel<Message> messageModel =
-                (DefaultListModel<Message>) ReflectionUtils.getPrivate(controller, "messageModel");
+                (DefaultListModel<Message>) ReflectionUtils.getPrivateInstance(controller, "messageModel");
         assert !messageModel.isEmpty();
     }
     
     @Test
-    void sendMessage() throws InvocationTargetException, NoSuchMethodException,
-                              IllegalAccessException, NoSuchFieldException {
-        JTextField messageField = (JTextField) ReflectionUtils.getPrivate(controller, "messageField");
+    void sendMessage() throws NoSuchMethodException, NoSuchFieldException {
+        JTextField messageField = (JTextField) ReflectionUtils.getPrivateInstance(controller, "messageField");
         messageField.setText(TEST_MESSAGE);
-        ReflectionUtils.invokePrivate(controller, "sendMessage", new Class[0]);
+        ReflectionUtils.invokePrivateInstance(controller, "sendMessage", new Class[0]);
         
         assert chat.getLastMessage().text().equals(TEST_MESSAGE);
     }
