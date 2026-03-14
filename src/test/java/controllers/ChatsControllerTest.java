@@ -11,9 +11,10 @@ import java.awt.*;
 
 class ChatsControllerTest extends AbstractTestController<ChatsController> {
     @Override
-    protected void createController() {
-        controller = new ChatsController(frame);
-        controller.load(user);
+    protected ChatsController createController() {
+        ChatsController chatsController = new ChatsController(frame);
+        chatsController.load(user);
+        return chatsController;
     }
     
     @Test

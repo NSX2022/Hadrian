@@ -17,9 +17,10 @@ class ChatControllerTest extends AbstractTestController<ChatController> {
     }
     
     @Override
-    protected void createController() {
-        controller = new ChatController(frame, chat);
-        controller.load(user);
+    protected ChatController createController() {
+        ChatController chatController = new ChatController(frame, chat);
+        chatController.load(user);
+        return chatController;
     }
     
     @Test

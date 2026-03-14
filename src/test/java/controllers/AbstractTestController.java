@@ -18,10 +18,10 @@ abstract class AbstractTestController<T extends AbstractController> extends Abst
     
     @BeforeEach
     void initController() {
-        createController();
+        controller = createController();
     }
     
-    protected abstract void createController();
+    protected abstract T createController();
     
     @Test
     void contentPanel() {
