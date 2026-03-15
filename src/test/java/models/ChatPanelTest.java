@@ -1,11 +1,14 @@
 package models;
 
+import app.App;
+import controllers.ChatController;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import testingClasses.ReflectionUtils;
 import testingClasses.AbstractTest;
 
 import javax.swing.*;
+import java.awt.*;
 
 class ChatPanelTest extends AbstractTest {
     private static ChatPanel chatPanel;
@@ -31,5 +34,18 @@ class ChatPanelTest extends AbstractTest {
     void lastMessage() throws NoSuchFieldException {
         JLabel recentMessageLabel = (JLabel) ReflectionUtils.getPrivateInstance(chatPanel, "recentMessageLabel");
         assert recentMessageLabel.getText().equals(tutorial.getLastMessage().text());
+    }
+    
+    @Test
+    void button() throws NoSuchFieldException {
+        ReflectionUtils.setPrivateStatic(App.class, "frame", frame);
+        
+        JButton openChatButton = (JButton) ReflectionUtils.getPrivateInstance(chatPanel, "openChatButton");
+        openChatButton.doClick();
+        
+        if(frame.getContentPane() instanceof ChatController controller) {
+            Chat data = (Chat) ReflectionUtils.getPrivateInstance(controller, "data");
+            assert data == tutorial;
+        }
     }
 }

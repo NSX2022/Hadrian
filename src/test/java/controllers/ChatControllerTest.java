@@ -23,6 +23,22 @@ class ChatControllerTest extends AbstractTestController<ChatController> {
         return chatController;
     }
     
+    @Override
+    @Test
+    protected void buttons() throws NoSuchFieldException {
+        JButton backButton = (JButton) ReflectionUtils.getPrivateInstance(controller, "backButton");
+        backButton.doClick();
+        assert frame.getContentPane().getClass() == ChatsController.class;
+        
+        int messages = chat.getMessages().size();
+        JButton sendButton = (JButton) ReflectionUtils.getPrivateInstance(controller, "sendButton");
+        JTextField messageField = (JTextField) ReflectionUtils.getPrivateInstance(controller, "messageField");
+        messageField.setText(TEST_MESSAGE);
+        sendButton.doClick();
+        int newMessages = chat.getMessages().size();
+        assert messages + 1 == newMessages && chat.getLastMessage().text().equals(TEST_MESSAGE);
+    }
+    
     @Test
     void members() throws NoSuchFieldException {
         DefaultListModel<String> memberModel =

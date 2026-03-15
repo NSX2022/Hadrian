@@ -17,6 +17,26 @@ class ChatsControllerTest extends AbstractTestController<ChatsController> {
         return chatsController;
     }
     
+    @Override
+    @Test
+    protected void buttons() throws NoSuchFieldException {
+        JButton backButton = (JButton) ReflectionUtils.getPrivateInstance(controller, "backButton");
+        backButton.doClick();
+        assert frame.getContentPane().getClass() == HomeController.class;
+        
+        JTextField usersField = (JTextField) ReflectionUtils.getPrivateInstance(controller, "usersField");
+        JTextArea messageArea = (JTextArea) ReflectionUtils.getPrivateInstance(controller, "messageArea");
+        
+        usersField.setText("1.1.1.1");
+        messageArea.setText(TEST_MESSAGE);
+
+        int chats = user.getChats().size();
+        JButton createChatButton = (JButton) ReflectionUtils.getPrivateInstance(controller, "createChatButton");
+        createChatButton.doClick();
+        
+        assert chats + 1 == user.getChats().size() && frame.getContentPane().getClass() == ChatController.class;
+    }
+    
     @Test
     void chatsPanel() throws NoSuchFieldException {
         JPanel chatsPanel = (JPanel) ReflectionUtils.getPrivateInstance(controller, "chatsPanel");

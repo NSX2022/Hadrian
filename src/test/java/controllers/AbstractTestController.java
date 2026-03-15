@@ -24,6 +24,9 @@ abstract class AbstractTestController<T extends AbstractController> extends Abst
     protected abstract T createController();
     
     @Test
+    protected abstract void buttons() throws Exception;
+    
+    @Test
     void contentPanel() {
         assert controller.getContentPanel() != null;
     }
