@@ -14,6 +14,7 @@ abstract class AbstractTestController<T extends AbstractController> extends Abst
     @BeforeAll
     static void setUp() throws NoSuchFieldException {
         ReflectionUtils.setPrivateStatic(App.class, "frame", frame);
+        ReflectionUtils.setPrivateStatic(App.class, "user", user);
     }
     
     @BeforeEach
