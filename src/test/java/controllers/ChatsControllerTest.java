@@ -56,9 +56,10 @@ class ChatsControllerTest extends AbstractTestController<ChatsController> {
         
         usersField.setText("1.1.1.1, 2.2.2.2");
         messageArea.setText(TEST_MESSAGE);
+        int chats = user.getChats().size();
         ReflectionUtils.invokePrivateInstance(controller, "createChat", new Class[0]);
         
-        assert user.getChats().size() == 2;
+        assert chats + 1 == user.getChats().size() && frame.getContentPane().getClass() == ChatController.class;
     }
     
     @ParameterizedTest
