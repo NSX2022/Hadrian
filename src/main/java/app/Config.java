@@ -19,16 +19,33 @@ public class Config {
     /*
        Load config.json values for the server + TUI
     */
+    private final JSONObject jsonObject;
+    
     
     //Default port number
     private int port = 9090;
     private String[] ipBlacklist, macBlacklist, ipWhitelist, macWhitelist;
     //Whether or not to display the IP address in the TUI
     private boolean hideIp = true;
-    private String username = InetAddress.getLocalHost().getHostName();
+    private String username;
     
-    public Config() throws UnknownHostException {
-        //TODO Create default values if the file does not exist
+    public Config() throws IOException {
+        InputStream input = ClassLoader.getSystemResourceAsStream("config.json");
+        if (input == null) {
+            String message = "config.json Missing From Resources";
+            FileNotFoundException exception = new FileNotFoundException(message);
+            Logging.log(message, Level.SEVERE, exception);
+            throw exception;
+        }
+        
+        try (input) {
+            String json = new Scanner(input).useDelimiter("\\Z").next();
+            jsonObject = new JSONObject(json);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+        
+        readConfig();
     }
     
     /**

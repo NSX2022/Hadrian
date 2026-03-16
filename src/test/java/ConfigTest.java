@@ -1,12 +1,10 @@
 import app.Config;
 
-import java.io.FileNotFoundException;
-import java.net.UnknownHostException;
+import java.io.IOException;
 
 public class ConfigTest {
-    public static void main(String[] args) throws FileNotFoundException, UnknownHostException {
+    public static void main(String[] args) throws IOException {
         Config conf = new Config();
-        conf.readConfig();
         System.out.println(conf.getPort());
     }
 }

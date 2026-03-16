@@ -10,6 +10,7 @@ import utils.Logging;
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
@@ -39,13 +40,12 @@ public final class App {
      *
      * @throws FileNotFoundException if config file cannot be found
      */
-    public static void run() throws FileNotFoundException, UnknownHostException {
-        Config conf = new Config();
-        conf.readConfig();
+    public static void run() throws IOException {
+        Config config = new Config();
         
         try {
             InetAddress host = InetAddress.getLocalHost();
-            user = new User(host.getHostAddress(), host.getHostName());
+            user = new User(host.getHostAddress(), config.getUsername());
         } catch (UnknownHostException e) {
             Logging.log("Failed To Get User IP Address", Level.SEVERE, e);
             throw new RuntimeException(e);

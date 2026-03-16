@@ -7,16 +7,16 @@ import network.Receiver;
 import network.Sender;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
 
 public class SocketTest {
     private static Config conf;
     public static void main(String[] args) throws FileNotFoundException, UnknownHostException {
-        conf = new Config();
         try {
-            conf.readConfig();
-        } catch (FileNotFoundException e) {
+            conf = new Config();
+        } catch (IOException e) {
             System.out.println(SocketTest.class.getProtectionDomain().getCodeSource().getLocation());
             throw new RuntimeException(e);
         }
