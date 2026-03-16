@@ -1,10 +1,11 @@
 package app;
 
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import utils.Logging;
-import utils.NetworkUtils;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -13,20 +14,17 @@ import java.util.Scanner;
 import java.util.logging.Level;
 
 /**
- * Utility class that loads and stores specific JSON values from config.json
+ * Class that loads and stores specific JSON values from config.json resource
  */
 public class Config {
-    /*
-       Load config.json values for the server + TUI
-    */
+    private final String IP_BLACKLIST = "ipBlacklist", MAC_BLACKLIST = "macBlacklist",
+            IP_WHITELIST = "ipWhitelist", MAC_WHITELIST = "macWhitelist",
+            HIDE_IP = "hideIp", USERNAME = "username", PORT = "port";
     private final JSONObject jsonObject;
     
-    
-    //Default port number
-    private int port = 9090;
-    private String[] ipBlacklist, macBlacklist, ipWhitelist, macWhitelist;
-    //Whether or not to display the IP address in the TUI
-    private boolean hideIp = true;
+    private int port;
+    private ArrayList<String> ipBlacklist, macBlacklist, ipWhitelist, macWhitelist;
+    private boolean hideIp;
     private String username;
     
     public Config() throws IOException {
@@ -55,37 +53,47 @@ public class Config {
      * @see JSONObject
      * @see JSONObject#getJSONArray(String)
      */
-    public void readConfig() throws FileNotFoundException {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.json");
-        if (inputStream == null) {
-            String message = "config.json Not Found In Resources Folder";
-            Logging.log(message, Level.SEVERE, new FileNotFoundException(message));
-            throw new FileNotFoundException(message);
-        }
+    public void readConfig() throws UnknownHostException {
+        ipBlacklist = JSONArrayToStringList(jsonObject.getJSONArray(IP_BLACKLIST));
+        macBlacklist = JSONArrayToStringList(jsonObject.getJSONArray(MAC_BLACKLIST));
+        ipWhitelist = JSONArrayToStringList(jsonObject.getJSONArray(IP_WHITELIST));
+        macWhitelist = JSONArrayToStringList(jsonObject.getJSONArray(MAC_WHITELIST));
         
-        String json = new Scanner(inputStream).useDelimiter("\\Z").next();
-        JSONObject jsonObject = new JSONObject(json);
-        port = jsonObject.getInt("port");
-
-        //NOTE: Camel case
-        ipBlacklist = jsonObject.getJSONArray("ipBlacklist").toList().toArray(new String[0]);
-        macBlacklist = jsonObject.getJSONArray("macBlacklist").toList().toArray(new String[0]);
-        ipWhitelist = jsonObject.getJSONArray("ipWhitelist").toList().toArray(new String[0]);
-        macWhitelist = jsonObject.getJSONArray("macWhitelist").toList().toArray(new String[0]);
+        port = jsonObject.getInt(PORT);
+        hideIp = jsonObject.getBoolean(HIDE_IP);
+        username = jsonObject.getString(USERNAME);
         
-        hideIp = jsonObject.getBoolean("hideIp");
-        username = jsonObject.getString("username");
+        if (username.isBlank())
+            username = InetAddress.getLocalHost().getHostName();
     }
     
+    private ArrayList<String> JSONArrayToStringList(JSONArray jsonArray) {
+        ArrayList<String> list = new ArrayList<>(jsonArray.length());
+        for (int i = 0; i < jsonArray.length(); i++)
+            list.add(jsonArray.getString(i));
+        return list;
+    }
+    
+    // region Getters/Setters
     public int getPort() {
         return port;
     }
     
     public void setPort(int port) {
         this.port = port;
+        jsonObject.put(PORT, port);
     }
     
-    public String[] getMacBlacklist() {
+    public ArrayList<String> getIpBlacklist() {
+        return ipBlacklist;
+    }
+    
+    public void addIpBlackList(String ipAddress) {
+        ipBlacklist.add(ipAddress);
+        jsonObject.put(IP_BLACKLIST, ipAddress);
+    }
+    
+    public ArrayList<String> getMacBlacklist() {
         return macBlacklist;
     }
     
@@ -93,11 +101,17 @@ public class Config {
         return ipBlacklist;
     }
     
-    public String[] getIpWhitelist() {
+    public ArrayList<String> getIpWhitelist() {
         return ipWhitelist;
     }
     
-    public String[] getMacWhitelist() {
+    public void addIpWhiteList(String ipAddress) {
+        ipWhitelist.add(ipAddress);
+        jsonObject.put(IP_WHITELIST, ipAddress);
+    }
+    
+    
+    public ArrayList<String> getMacWhitelist() {
         return macWhitelist;
     }
     
@@ -108,4 +122,5 @@ public class Config {
     public void setHideIp(boolean hideIp) {
         this.hideIp = hideIp;
     }
+    // endregion
 }
