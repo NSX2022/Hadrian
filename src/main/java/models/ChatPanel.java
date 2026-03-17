@@ -10,6 +10,7 @@ import java.util.HashSet;
  * A class representing a singular chat panel object.
  */
 public final class ChatPanel extends JPanel {
+    private final int maxLabelLength = 30;
     private JPanel contentPanel;
     private JButton openChatButton;
     private JLabel membersLabel;
@@ -30,6 +31,19 @@ public final class ChatPanel extends JPanel {
             
             App.draw();
         });
+        
+        truncateLabel(membersLabel);
+        truncateLabel(recentMessageLabel);
+    }
+    
+    private void truncateLabel(JLabel label) {
+        String text = label.getText();
+        
+        if (text.length() <= maxLabelLength)
+            return;
+        
+        text = text.substring(0, maxLabelLength - 3) + "...";
+        label.setText(text);
     }
     
     /**
