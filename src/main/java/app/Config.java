@@ -49,7 +49,7 @@ public class Config {
     /**
      * Reads config.json, setting the values contained to java variables to be accessed using getters/setters.
      *
-     * @throws FileNotFoundException if config.json is not found
+     * @throws UnknownHostException if localhost address cannot be fetched
      * @see JSONObject
      * @see JSONObject#getJSONArray(String)
      */
@@ -74,6 +74,10 @@ public class Config {
         return list;
     }
     
+    public void resetToDefaults() {
+        // TODO: reset all values to default
+    }
+    
     // region Getters/Setters
     public int getPort() {
         return port;
@@ -82,6 +86,23 @@ public class Config {
     public void setPort(int port) {
         this.port = port;
         jsonObject.put(PORT, port);
+    }
+    
+    public boolean getHideIp() {
+        return hideIp;
+    }
+    
+    public void setHideIp(boolean hideIp) {
+        this.hideIp = hideIp;
+        jsonObject.put(HIDE_IP, hideIp);
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+        jsonObject.put(USERNAME, username);
     }
     
     public ArrayList<String> getIpBlacklist() {
@@ -97,8 +118,9 @@ public class Config {
         return macBlacklist;
     }
     
-    public String[] getIpBlacklist() {
-        return ipBlacklist;
+    public void addMacBlackList(String macAddress) {
+        macBlacklist.add(macAddress);
+        jsonObject.put(MAC_BLACKLIST, macAddress);
     }
     
     public ArrayList<String> getIpWhitelist() {
@@ -110,17 +132,13 @@ public class Config {
         jsonObject.put(IP_WHITELIST, ipAddress);
     }
     
-    
     public ArrayList<String> getMacWhitelist() {
         return macWhitelist;
     }
     
-    public boolean getHideIp() {
-        return hideIp;
-    }
-    
-    public void setHideIp(boolean hideIp) {
-        this.hideIp = hideIp;
+    public void addMacWhiteList(String macAddress) {
+        macWhitelist.add(macAddress);
+        jsonObject.put(MAC_WHITELIST, macAddress);
     }
     // endregion
 }

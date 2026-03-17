@@ -1,17 +1,9 @@
 {
   "port": 9090,
   "hideIp": true,
-  "username": "Anon",
-  "ipBlacklist": [
-
-  ],
-  "macBlacklist": [
-
-  ],
-  "ipWhitelist": [
-
-  ],
-  "macWhitelist": [
-
-  ]
+  "username": "",
+  "ipBlacklist": [],
+  "macBlacklist": [],
+  "ipWhitelist": [],
+  "macWhitelist": []
 }
