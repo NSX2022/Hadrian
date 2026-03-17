@@ -4,11 +4,10 @@ import app.App;
 import controllers.ChatController;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import testingClasses.ReflectionUtils;
 import testingClasses.AbstractTest;
+import testingClasses.ReflectionUtils;
 
 import javax.swing.*;
-import java.awt.*;
 
 class ChatPanelTest extends AbstractTest {
     private static ChatPanel chatPanel;
@@ -43,7 +42,7 @@ class ChatPanelTest extends AbstractTest {
         JButton openChatButton = (JButton) ReflectionUtils.getPrivateInstance(chatPanel, "openChatButton");
         openChatButton.doClick();
         
-        if(frame.getContentPane() instanceof ChatController controller) {
+        if (frame.getContentPane() instanceof ChatController controller) {
             Chat data = (Chat) ReflectionUtils.getPrivateInstance(controller, "data");
             assert data == tutorial;
         }

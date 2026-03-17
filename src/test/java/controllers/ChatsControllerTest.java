@@ -29,7 +29,7 @@ class ChatsControllerTest extends AbstractTestController<ChatsController> {
         
         usersField.setText("1.1.1.1");
         messageArea.setText(TEST_MESSAGE);
-
+        
         int chats = user.getChats().size();
         JButton createChatButton = (JButton) ReflectionUtils.getPrivateInstance(controller, "createChatButton");
         createChatButton.doClick();

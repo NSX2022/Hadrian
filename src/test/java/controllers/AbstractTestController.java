@@ -5,8 +5,8 @@ import models.Screens;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import testingClasses.ReflectionUtils;
 import testingClasses.AbstractTest;
+import testingClasses.ReflectionUtils;
 
 abstract class AbstractTestController<T extends AbstractController> extends AbstractTest {
     protected T controller;

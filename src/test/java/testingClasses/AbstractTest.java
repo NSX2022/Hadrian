@@ -8,9 +8,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public abstract class AbstractTest {
-    protected final String TEST_MESSAGE = "Message Test";
     protected static User user;
     protected static JFrame frame;
+    protected final String TEST_MESSAGE = "Message Test";
     
     @BeforeAll
     static void setUp() throws UnknownHostException {

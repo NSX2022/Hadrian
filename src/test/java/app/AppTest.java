@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import testingClasses.ReflectionUtils;
 import testingClasses.AbstractTest;
+import testingClasses.ReflectionUtils;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -21,6 +21,14 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 class AppTest extends AbstractTest {
+    private static Stream<Arguments> screenProvider() {
+        return Stream.of(
+                Arguments.of(Screens.HOME, HomeController.class),
+                Arguments.of(Screens.HELP, HelpController.class),
+                Arguments.of(Screens.CHATS, ChatsController.class)
+        );
+    }
+    
     @Test
     void run() throws NoSuchFieldException, IOException {
         App.run();
@@ -30,14 +38,6 @@ class AppTest extends AbstractTest {
         
         JFrame frame = (JFrame) ReflectionUtils.getPrivateStatic(App.class, "frame");
         assert frame.getContentPane().getClass() == HomeController.class;
-    }
-    
-    private static Stream<Arguments> screenProvider() {
-        return Stream.of(
-                Arguments.of(Screens.HOME, HomeController.class),
-                Arguments.of(Screens.HELP, HelpController.class),
-                Arguments.of(Screens.CHATS, ChatsController.class)
-        );
     }
     
     @ParameterizedTest
