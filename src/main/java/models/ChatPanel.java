@@ -4,6 +4,7 @@ import app.App;
 import controllers.ChatController;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.util.HashSet;
 
 /**
@@ -23,6 +24,9 @@ public final class ChatPanel extends JPanel {
         
         recentMessageLabel.setText(chat.getLastMessage().text());
         openChatButton.setText("Open Chat " + (chatIndex + 1));
+        
+        TitledBorder border = (TitledBorder) contentPanel.getBorder();
+        border.setTitle("Chat " + (chatIndex + 1));
         
         openChatButton.addActionListener(e -> {
             ChatController controller = new ChatController(appFrame, chat);
