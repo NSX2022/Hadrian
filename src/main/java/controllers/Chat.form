@@ -80,7 +80,7 @@
           </component>
         </children>
       </grid>
-      <scrollpane id="9d28a">
+      <scrollpane id="9d28a" binding="scrollPane">
         <constraints border-constraint="Center"/>
         <properties>
           <autoscrolls value="true"/>

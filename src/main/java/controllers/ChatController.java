@@ -26,6 +26,7 @@ public class ChatController extends AbstractController implements Loadable {
     private JList<Message> messageList;
     private JTextField messageField;
     private JButton sendButton;
+    private JScrollPane scrollPane;
     
     public ChatController(JFrame appFrame, Chat data) {
         super(appFrame, Screens.CHAT);
@@ -70,6 +71,8 @@ public class ChatController extends AbstractController implements Loadable {
         }
         
         App.draw();
+        
+        scrollToBottom();
     }
     
     /**
@@ -99,5 +102,12 @@ public class ChatController extends AbstractController implements Loadable {
         messageField.setText("");
         
         App.draw();
+        
+        scrollToBottom();
+    }
+    
+    private void scrollToBottom() {
+        JScrollBar scrollBar = scrollPane.getVerticalScrollBar();
+        scrollBar.setValue(scrollBar.getMaximum());
     }
 }
