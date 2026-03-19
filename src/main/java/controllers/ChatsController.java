@@ -7,6 +7,9 @@ import models.Screens;
 import models.User;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.HashSet;
 import java.util.List;
 
@@ -34,6 +37,15 @@ public class ChatsController extends AbstractController implements Loadable {
         createChatButton.addActionListener(e -> createChat());
         
         bindKey("ESCAPE", "back", () -> App.changeScreen(Screens.HOME));
+        
+        // bind ENTER key to create chat in text area
+        messageArea.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "createChat");
+        messageArea.getActionMap().put("createChat", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                createChat();
+            }
+        });
     }
     
     /**
@@ -47,6 +59,19 @@ public class ChatsController extends AbstractController implements Loadable {
             Chat chat = user.getChat(i);
             ChatPanel panel = new ChatPanel(appFrame, i, chat);
             chatsPanel.add(panel, i);
+            
+            // num key to corresponding chat, only when text components are not focused
+            bindKey(String.valueOf(i + 1), "enterChat" + i, () -> {
+                Component focus = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+                if (focus instanceof JTextComponent)
+                    return;
+                
+                ChatController controller = new ChatController(appFrame, chat);
+                controller.init();
+                controller.load(App.getUser());
+                
+                App.draw();
+            });
         }
     }
     
