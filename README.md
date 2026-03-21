@@ -1,8 +1,6 @@
 # Hadrian
 ### [Installation Guide](INSTALL.md)
 
----
-
 ## Overview
 Designed to combat excessive data collection and lack of anonymity with modern messaging apps, Hadrian is an encrypted, peer-to-peer, zero trust messaging application. Users can anonymously send messages to other IP addresses using UDP protocol. All data is between you and whoever you are messaging - no centralization, no port forwarding, no verification of any kind.
 

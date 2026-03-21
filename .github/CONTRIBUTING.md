@@ -1,7 +1,6 @@
 # Contributing
 We are open to community contributions. By participating in this project, you agree to abide by our code of conduct and follow these guidelines to make collaboration smooth and productive.
 
----
 ## How to Contribute
 You can contribute by:
 - Reporting bugs or issues
@@ -33,19 +32,16 @@ When reporting an issue, please include:
 	```
 6. Open a pull request on the main repository and describe your changes clearly, or by using the [project's pull request template](PULL_REQUEST_TEMPLATE.md).
 
----
 ## Coding Standards
 - Follow consistent code formatting (indentation, line breaks, etc.)
 - Write clear and descriptive comments where necessary
 - Include tests for new features or bug fixes if applicable
 - Maintain readability and simplicity
 
----
 ## Communication
 - Use issues for feature requests, bug reports, or discussions.
 - Be polite and constructive in comments and code reviews.
 - For quick discussions, refer to any official chat or forum channels.
 
----
 ## License
 By contributing, you agree that your contributions will be licensed under the [project’s license](../LICENSE.md).
