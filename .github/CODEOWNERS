@@ -1,20 +1,25 @@
-*                                   @NedStark @CalciumKing
+*                                   @NSX2022 @CalciumKing
 
 .github/                            @CalciumKing
 
 src/main/java/app/App.java          @CalciumKing
-src/main/java/app/Config.java       @NedStark @CalciumKing
+src/main/java/app/Config.java       @NSX2022 @CalciumKing
 
 src/main/java/controllers/          @CalciumKing
 
 src/main/java/models/               @CalciumKing
 
-src/main/java/network/              @NedStark
+src/main/java/network/              @NSX2022
 
-src/main/java/utils/                @NedStark
+src/main/java/utils/                @NSX2022
 src/main/java/utils/Logging.java    @CalciumKing
 
-src/main/resources/                 @NedStark
+src/main/resources/                 @NSX2022
 
 README.md                           @CalciumKing
 INSTALL.md                          @CalciumKing
+
+src/test/java/                      @CalciumKing
+
+src/test/java/SocketTest.java       @NSX2022
+src/test/java/TestPrimes.java       @NSX2022
