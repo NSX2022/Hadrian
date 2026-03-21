@@ -1,9 +1,7 @@
 ---
-name: Bug report
-about: Use this template to report a bug in the project.
-title: "[Bug]: "
-labels: ["bug", "triage"]
-assignees: ["@your-username"]
+name: Issue Template
+about: Use this template to create a structured report about the project.
+title: "[ISSUE_TYPE]: "
 ---
 
 ## Current Behavior
@@ -22,9 +20,9 @@ assignees: ["@your-username"]
 
 ## Environment
 <!--
-* OS: [e.g. Ubuntu 20.04]
-* Browser: [e.g. Chrome, Safari]
-* Version: [e.g. 1.0.0]
+- OS: [e.g. Ubuntu 20.04]
+- Browser: [e.g. Chrome, Safari]
+- Version: [e.g. 1.0.0]
 --->
 
 ## Anything Else
