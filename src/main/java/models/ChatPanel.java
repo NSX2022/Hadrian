@@ -40,6 +40,16 @@ public final class ChatPanel extends JPanel {
         truncateLabel(recentMessageLabel);
     }
     
+    /**
+     * Truncates a label to a constant character limit integer
+     * <p>
+     * If label length is above constant limit, the last 3 characters before cutoff are replaced with "..."
+     * (i.e.: Some Test Messag...)
+     *
+     * @param label JLabel object to truncate the text of
+     * @see JLabel
+     * @see #maxLabelLength
+     */
     private void truncateLabel(JLabel label) {
         String text = label.getText();
         
@@ -69,9 +79,5 @@ public final class ChatPanel extends JPanel {
         }
         
         membersLabel.setText(membersString.toString());
-        
-        // TODO remove all commented depreciated code
-        //  handle all to dos
-        //  create notification functionality
     }
 }

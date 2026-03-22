@@ -127,6 +127,13 @@ public final class App {
         frame.repaint();
     }
     
+    /**
+     * Toggles dark mode for the entire application using Flat-Laf
+     *
+     * @see com.formdev.flatlaf.FlatLaf
+     * @see FlatDarkLaf
+     * @see FlatLightLaf
+     */
     public static void toggleDarkMode() {
         isDarkMode = !isDarkMode;
         

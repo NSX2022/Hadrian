@@ -67,6 +67,13 @@ public class Config {
             username = InetAddress.getLocalHost().getHostName();
     }
     
+    /**
+     * Converts a JSONArray object into a String ArrayList.
+     *
+     * @param jsonArray object read directly from a JSON file
+     * @return a String ArrayList containing all the same values as the JSONArray
+     * @see JSONArray
+     */
     private ArrayList<String> JSONArrayToStringList(JSONArray jsonArray) {
         ArrayList<String> list = new ArrayList<>(jsonArray.length());
         for (int i = 0; i < jsonArray.length(); i++)

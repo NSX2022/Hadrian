@@ -21,6 +21,7 @@ public class Chat {
         user.addChat(this);
     }
     
+    // region Getters/Setters
     public HashSet<String> getUsers() {
         return users;
     }
@@ -74,4 +75,5 @@ public class Chat {
     public void addMessage(Message message) {
         messages.add(message);
     }
+    // endregion
 }

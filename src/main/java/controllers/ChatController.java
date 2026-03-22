@@ -106,6 +106,12 @@ public class ChatController extends AbstractController implements Loadable {
         scrollToBottom();
     }
     
+    /**
+     * Forces the scroll pane containing chat messages to reach its maximum value
+     * (displaying the bottom, most recent messages)
+     *
+     * @see JScrollPane#getVerticalScrollBar()
+     */
     private void scrollToBottom() {
         JScrollBar scrollBar = scrollPane.getVerticalScrollBar();
         scrollBar.setValue(scrollBar.getMaximum());

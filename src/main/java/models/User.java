@@ -12,7 +12,13 @@ public class User {
     private final ArrayList<Chat> chats;
     private String ip, username;
     
-    public User(String ip, String username) {  // new user
+    /**
+     * Constructor for creating a new user and initializing the tutorial chat.
+     *
+     * @param ip user's IP address
+     * @param username username to display the user as (typically the hostname)
+     */
+    public User(String ip, String username) {
         this.ip = ip;
         this.username = username;
         chats = new ArrayList<>();
@@ -20,6 +26,13 @@ public class User {
         createTutorial();
     }
     
+    /**
+     * Constructor for initializing an already existing user, not creating a tutorial.
+     *
+     * @param ip user's IP address
+     * @param username username to display the user as (typically the hostname)
+     * @param chats any chats the user is currently a member of
+     */
     public User(String ip, String username, ArrayList<Chat> chats) {
         this.ip = ip;
         this.username = username;
