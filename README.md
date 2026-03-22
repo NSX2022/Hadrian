@@ -12,3 +12,10 @@ Hadrian is written entirely in Java, meaning that as long as Java 21 is installe
 
 ## How To Install
 It is highly recommended to follow the [Installation Guide](INSTALL.md) for step-by-step setup and troubleshooting. Please read all instructions and have an understanding of commands before executing them on your machine to prevent possible damage.
+
+## Showcase
+display all images here with descriptions
+<img src="images/image.png">
+<p align="center">
+	description text here
+</p>
