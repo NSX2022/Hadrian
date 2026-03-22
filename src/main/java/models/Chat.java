@@ -35,26 +35,6 @@ public class Chat {
     }
     
     /**
-     * Adds a user's IP address to a chat's user collection.
-     *
-     * @param user User IP to be added to collection
-     * @return true if user was not already in collection and added successfully, false otherwise.
-     */
-    public boolean addUser(String user) {
-        return users.add(user);
-    }
-    
-    /**
-     * Removes a user's IP from a chat's user collection
-     *
-     * @param user User IP to be removed from collection
-     * @return true if user was in collection and removed successfully, false otherwise.
-     */
-    public boolean removeUser(String user) {
-        return users.remove(user);
-    }
-    
-    /**
      * Adds a message object to the end of the chat's message collection
      *
      * @param text text to be added to the end of the collection
@@ -74,6 +54,28 @@ public class Chat {
      */
     public void addMessage(Message message) {
         messages.add(message);
+    }
+    
+    /**
+     * Adds a user's IP address to a chat's user collection.
+     *
+     * @param user User IP to be added to collection
+     * @return true if user was not already in collection and added successfully, false otherwise.
+     * @see #removeUser(String)
+     */
+    public boolean addUser(String user) {
+        return users.add(user);
+    }
+    
+    /**
+     * Removes a user's IP from a chat's user collection
+     *
+     * @param user User IP to be removed from collection
+     * @return true if user was in collection and removed successfully, false otherwise.
+     * @see #addUser(String)
+     */
+    public boolean removeUser(String user) {
+        return users.remove(user);
     }
     // endregion
 }
