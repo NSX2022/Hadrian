@@ -1,6 +1,7 @@
 package network;
 
 import app.Config;
+import utils.Constants;
 import utils.Logging;
 import utils.Primes;
 
@@ -11,6 +12,7 @@ import java.math.BigInteger;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 
 import org.w3c.dom.*;
@@ -37,7 +39,7 @@ public class Receiver {
      * @see #startServer()
      * @see #stopServer()
      */
-    private Thread serverFactory() throws FileNotFoundException {
+    private Thread serverFactory() throws FileNotFoundException, UnknownHostException {
         //For loading config changes while the program is executing, kill the current server/thread and start a new one
         conf.readConfig();
         
@@ -60,7 +62,7 @@ public class Receiver {
                         BigInteger[] factors = Primes.generatePrimes(5);
                         BigInteger pubNum = factors[0].multiply(factors[1]);
 
-                        byte[] buffer = new byte[conf.getMaxBytesPerMessage()];
+                        byte[] buffer = new byte[Constants.MAX_PACKET_BYTES.ordinal()];
                         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
                         socket.receive(packet);
@@ -87,7 +89,7 @@ public class Receiver {
      * @see #serverFactory()
      * @see #stopServer()
      */
-    public void startServer() throws FileNotFoundException {
+    public void startServer() throws FileNotFoundException, UnknownHostException {
         serverThread = serverFactory();
         serverThread.start();
     }
