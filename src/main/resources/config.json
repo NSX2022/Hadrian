@@ -1,6 +1,8 @@
 {
   "port": 9090,
+  "fontSize": 30,
   "hideIp": true,
+  "darkMode": true,
   "username": "",
   "ipBlacklist": [],
   "macBlacklist": [],

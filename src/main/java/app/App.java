@@ -104,6 +104,7 @@ public final class App {
             case HOME -> new HomeController(frame);
             case CHATS -> new ChatsController(frame);
             case HELP -> new HelpController(frame);
+            case SETTINGS -> new SettingsController(frame);
             default -> throw new IllegalArgumentException("Unknown screen type:" + screen);
         };
         

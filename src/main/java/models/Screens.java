@@ -9,5 +9,6 @@ public enum Screens {
     HOME,
     CHATS,
     HELP,
+    SETTINGS,
     CHAT
 }
