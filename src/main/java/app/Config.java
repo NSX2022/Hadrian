@@ -19,12 +19,12 @@ import java.util.logging.Level;
 public class Config {
     private final String IP_BLACKLIST = "ipBlacklist", MAC_BLACKLIST = "macBlacklist",
             IP_WHITELIST = "ipWhitelist", MAC_WHITELIST = "macWhitelist",
-            HIDE_IP = "hideIp", USERNAME = "username", PORT = "port";
+            HIDE_IP = "hideIp", DARK_MODE = "darkMode", USERNAME = "username", PORT = "port", FONT_SIZE = "fontSize";
     private final JSONObject jsonObject;
     
-    private int port;
+    private int port, fontSize;
     private ArrayList<String> ipBlacklist, macBlacklist, ipWhitelist, macWhitelist;
-    private boolean hideIp;
+    private boolean hideIp, darkMode;
     private String username;
     
     public Config() throws IOException {
@@ -60,11 +60,15 @@ public class Config {
         macWhitelist = JSONArrayToStringList(jsonObject.getJSONArray(MAC_WHITELIST));
         
         port = jsonObject.getInt(PORT);
+        fontSize = jsonObject.getInt(FONT_SIZE);
         hideIp = jsonObject.getBoolean(HIDE_IP);
+        darkMode = jsonObject.getBoolean(DARK_MODE);
         username = jsonObject.getString(USERNAME);
         
-        if (username.isBlank())
+        if (username.isBlank()) {
             username = InetAddress.getLocalHost().getHostName();
+            saveData();
+        }
     }
     
     /**
@@ -95,6 +99,15 @@ public class Config {
         jsonObject.put(PORT, port);
     }
     
+    public int getFontSize() {
+        return fontSize;
+    }
+    
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+        jsonObject.put(FONT_SIZE, fontSize);
+    }
+    
     public boolean getHideIp() {
         return hideIp;
     }
@@ -104,9 +117,19 @@ public class Config {
         jsonObject.put(HIDE_IP, hideIp);
     }
     
+    public boolean isDarkMode() {
+        return darkMode;
+    }
+    
+    public void setDarkMode(boolean darkMode) {
+        this.darkMode = darkMode;
+        jsonObject.put(DARK_MODE, darkMode);
+    }
+    
     public String getUsername() {
         return username;
     }
+    
     public void setUsername(String username) {
         this.username = username;
         jsonObject.put(USERNAME, username);
@@ -118,7 +141,12 @@ public class Config {
     
     public void addIpBlackList(String ipAddress) {
         ipBlacklist.add(ipAddress);
-        jsonObject.put(IP_BLACKLIST, ipAddress);
+        jsonObject.append(IP_BLACKLIST, ipAddress);
+    }
+    
+    public void setIpBlacklist(ArrayList<String> ipBlacklist) {
+        this.ipBlacklist = ipBlacklist;
+        jsonObject.put(IP_BLACKLIST, ipBlacklist);
     }
     
     public ArrayList<String> getMacBlacklist() {
@@ -127,7 +155,12 @@ public class Config {
     
     public void addMacBlackList(String macAddress) {
         macBlacklist.add(macAddress);
-        jsonObject.put(MAC_BLACKLIST, macAddress);
+        jsonObject.append(MAC_BLACKLIST, macAddress);
+    }
+    
+    public void setMacBlacklist(ArrayList<String> macBlacklist) {
+        this.macBlacklist = macBlacklist;
+        jsonObject.put(MAC_BLACKLIST, macBlacklist);
     }
     
     public ArrayList<String> getIpWhitelist() {
@@ -136,7 +169,12 @@ public class Config {
     
     public void addIpWhiteList(String ipAddress) {
         ipWhitelist.add(ipAddress);
-        jsonObject.put(IP_WHITELIST, ipAddress);
+        jsonObject.append(IP_WHITELIST, ipAddress);
+    }
+    
+    public void setIpWhitelist(ArrayList<String> ipWhitelist) {
+        this.ipWhitelist = ipWhitelist;
+        jsonObject.put(IP_WHITELIST, ipWhitelist);
     }
     
     public ArrayList<String> getMacWhitelist() {
@@ -145,7 +183,12 @@ public class Config {
     
     public void addMacWhiteList(String macAddress) {
         macWhitelist.add(macAddress);
-        jsonObject.put(MAC_WHITELIST, macAddress);
+        jsonObject.append(MAC_WHITELIST, macAddress);
+    }
+    
+    public void setMacWhitelist(ArrayList<String> macWhitelist) {
+        this.macWhitelist = macWhitelist;
+        jsonObject.put(MAC_WHITELIST, macWhitelist);
     }
     // endregion
 }
