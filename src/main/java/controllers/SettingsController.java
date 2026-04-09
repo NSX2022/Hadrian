@@ -64,6 +64,11 @@ public class SettingsController extends AbstractController {
             }
         });
         
+        ipBlacklistTextArea.setText(formatArrays(config.getIpBlacklist()));
+        ipWhitelistTextArea.setText(formatArrays(config.getIpWhitelist()));
+        macBlacklistTextArea.setText(formatArrays(config.getMacBlacklist()));
+        macWhitelistTextArea.setText(formatArrays(config.getMacWhitelist()));
+        
         resetToDefaultsButton.addActionListener(e -> {
             config.resetToDefaults();
             App.changeScreen(Screens.SETTINGS);
@@ -120,6 +125,17 @@ public class SettingsController extends AbstractController {
     @Override
     protected JPanel getContentPanel() {
         return contentPanel;
+    }
+    
+    private String formatArrays(ArrayList<String> arrayList) {
+        int last = arrayList.size() - 1;
+        StringBuilder formatted = new StringBuilder();
+        for (int i = 0; i < arrayList.size(); i++) {
+            formatted.append(arrayList.get(i));
+            if (i != last)
+                formatted.append(", ");
+        }
+        return formatted.toString();
     }
     
     private boolean isInvalidIPs(String ipSequence) {
