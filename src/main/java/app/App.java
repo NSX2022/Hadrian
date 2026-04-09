@@ -23,7 +23,6 @@ import java.util.logging.Level;
 public final class App {
     private static User user;
     private static JFrame frame;
-    private static boolean isDarkMode;
     
     public static void main(String[] args) {
         try {
@@ -67,8 +66,8 @@ public final class App {
      * @see GraphicsEnvironment
      */
     private static JFrame initJFrame() {
-        toggleDarkMode();
-        UIManager.put("defaultFont", new Font("Hack FC Ligatured", Font.PLAIN, 30));
+        setDarkMode(config.isDarkMode());
+        UIManager.put("defaultFont", new Font("Hack FC Ligatured", Font.PLAIN, config.getFontSize()));
         
         JFrame appFrame = new JFrame("Hadrian");
         new HomeController(appFrame).init();
@@ -129,19 +128,20 @@ public final class App {
     }
     
     /**
-     * Toggles dark mode for the entire application using Flat-Laf
+     * Set dark mode either on or off for the entire application using Flat-Laf
      *
+     * @param darkMode true enables dark mode, false enables light mode
      * @see com.formdev.flatlaf.FlatLaf
      * @see FlatDarkLaf
      * @see FlatLightLaf
      */
-    public static void toggleDarkMode() {
-        isDarkMode = !isDarkMode;
-        
-        if (isDarkMode)
+    public static void setDarkMode(boolean darkMode) {
+        if (darkMode)
             FlatDarkLaf.setup();  // Flat-Laf Dark Application Theme
         else
             FlatLightLaf.setup();  // Flat-Laf Light Application Theme
+        
+        config.setDarkMode(darkMode);
     }
     
     public static User getUser() {

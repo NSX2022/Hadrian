@@ -66,12 +66,12 @@ class AppTest extends AbstractTest {
     }
     
     @Test
-    void toggleDarkMode() throws NoSuchFieldException, NoSuchMethodException {
+    void setDarkMode() throws NoSuchFieldException, NoSuchMethodException, IOException {
         ReflectionUtils.invokePrivateStatic(App.class, "initJFrame", new Class[0]);
         ReflectionUtils.setPrivateStatic(App.class, "frame", frame);
         
         String before = UIManager.getLookAndFeel().getName();
-        App.toggleDarkMode();
+        App.setDarkMode(false);
         String after = UIManager.getLookAndFeel().getName();
         
         assert !before.equals(after);
