@@ -139,22 +139,20 @@ public class SettingsController extends AbstractController {
     }
     
     private boolean isInvalidIPs(String ipSequence) {
-        String regex = "^\\s*(?:25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)" +
-                "(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)){3}" +
-                "(?:\\s*,\\s*(?:25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)" +
-                "(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)){3})*\\s*$";
+        String regex = "^\\s*$|^(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d?|0)" +
+                "(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d?|0)){3}" +
+                "(?:\\s*,\\s*(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d?|0)" +
+                "(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d?|0)){3})*$";
         
-        return ipSequence.matches(regex);
+        return !ipSequence.matches(regex);
     }
     
     private boolean isInvalidMacs(String macSequence) {
-        // TODO: verify this
-        String regex = "^\\s*(?:[0-9A-Fa-f]{2}([-:])[0-9A-Fa-f]{2}" +
-                "(?:\\1[0-9A-Fa-f]{2}){4})" +
-                "(?:\\s*,\\s*(?:[0-9A-Fa-f]{2}([-:])" +
-                "[0-9A-Fa-f]{2}" +
-                "(?:\\2[0-9A-Fa-f]{2}){4}))*\\s*$";
+        String regex = "^(?:\\s*$|[0-9A-Fa-f]{2}" +
+                "([-:])(?:[0-9A-Fa-f]{2}\\1){4}" +
+                "[0-9A-Fa-f]{2}(?:\\s*,\\s*[0-9A-Fa-f]{2}" +
+                "([-:])(?:[0-9A-Fa-f]{2}\\2){4}[0-9A-Fa-f]{2})*$)";
         
-        return macSequence.matches(regex);
+        return !macSequence.matches(regex);
     }
 }
