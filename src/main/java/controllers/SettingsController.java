@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +71,11 @@ public class SettingsController extends AbstractController {
         macWhitelistTextArea.setText(formatArrays(config.getMacWhitelist()));
         
         resetToDefaultsButton.addActionListener(e -> {
-            config.resetToDefaults();
+            try {
+                config.resetToDefaults();
+            } catch (UnknownHostException ex) {
+                throw new RuntimeException(ex);
+            }
             App.changeScreen(Screens.SETTINGS);
         });
         
@@ -102,23 +107,27 @@ public class SettingsController extends AbstractController {
             
             config.setUsername(usernameField.getText());
             
+            String splitRegex = ",\\s*";
+            
             if (isInvalidIPs(ipBlacklistTextArea.getText()) || isInvalidIPs(ipWhitelistTextArea.getText())) {
                 displayNotif("Invalid IP Listing(s)");
                 return;
             }
             
-            config.setIpBlacklist(new ArrayList<>(List.of(ipBlacklistTextArea.getText().split(",\\s*"))));
-            config.setIpWhitelist(new ArrayList<>(List.of(ipWhitelistTextArea.getText().split(",\\s*"))));
+            config.setIpBlacklist(new ArrayList<>(List.of(ipBlacklistTextArea.getText().split(splitRegex))));
+            config.setIpWhitelist(new ArrayList<>(List.of(ipWhitelistTextArea.getText().split(splitRegex))));
             
             if (isInvalidMacs(macBlacklistTextArea.getText()) || isInvalidMacs(macWhitelistTextArea.getText())) {
                 displayNotif("Invalid MAC Listing(s)");
                 return;
             }
             
-            config.setMacBlacklist(new ArrayList<>(List.of(macBlacklistTextArea.getText().split(",\\s*"))));
-            config.setMacWhitelist(new ArrayList<>(List.of(macWhitelistTextArea.getText().split(",\\s*"))));
+            config.setMacBlacklist(new ArrayList<>(List.of(macBlacklistTextArea.getText().split(splitRegex))));
+            config.setMacWhitelist(new ArrayList<>(List.of(macWhitelistTextArea.getText().split(splitRegex))));
             
             App.changeScreen(Screens.SETTINGS);
+            
+            config.saveData();
         });
     }
     
