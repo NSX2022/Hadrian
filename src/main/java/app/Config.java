@@ -31,22 +31,44 @@ public class Config {
     private String username;
     
     public Config() throws IOException {
-        InputStream input = ClassLoader.getSystemResourceAsStream("config.json");
-        if (input == null) {
-            String message = "config.json Missing From Resources";
-            FileNotFoundException exception = new FileNotFoundException(message);
-            Logging.log(message, Level.SEVERE, exception);
-            throw exception;
+        Path configDir = getConfigDir();
+        configPath = configDir.resolve("config.json");
+        String defaultsJsonString;
+        
+        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream("defaults.json")) {
+            if (input == null) {
+                String message = "defaults.json Missing From Resources";
+                FileNotFoundException exception = new FileNotFoundException(message);
+                Logging.log(message, Level.SEVERE, exception);
+                throw exception;
+            }
+            
+            defaultsJsonString = new String(input.readAllBytes(), StandardCharsets.UTF_8);
+            defaultsJson = new JSONObject(defaultsJsonString);
         }
         
-        try (input) {
-            String json = new Scanner(input).useDelimiter("\\Z").next();
-            jsonObject = new JSONObject(json);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        if (!Files.exists(configPath)) {
+            Files.createDirectories(configDir);
+            Files.writeString(configPath, defaultsJsonString);
+            Logging.log("Config File Created From defaults.json", Level.INFO);
         }
+        
+        String configJsonString = new Scanner(configPath).useDelimiter("\\Z").next();
+        configJson = new JSONObject(configJsonString);
         
         readConfig();
+    }
+    
+    private Path getConfigDir() {
+        String os = System.getProperty("os.name").toLowerCase();
+        String home = System.getProperty("user.home");
+        
+        if (os.contains("win"))
+            return Path.of(System.getenv("LOCALAPPDATA"), "Hadrian");
+        else if (os.contains("mac"))
+            return Path.of(home, "Library", "Application Support", "Hadrian");
+        else
+            return Path.of(home, ".config", "Hadrian");
     }
     
     /**
@@ -88,8 +110,33 @@ public class Config {
         return list;
     }
     
-    public void resetToDefaults() {
-        // TODO: reset all values to default
+    /**
+     * Saves data from JSON runtime variable to local JSON file to load settings between application runs.
+     *
+     * @see Files#writeString(Path, CharSequence, OpenOption...)
+     * @see JSONObject
+     */
+    public void saveData() {
+        try {
+            Files.writeString(configPath, configJson.toString(2));
+        } catch (IOException e) {
+            Logging.log("Failed To Write To Json", Level.SEVERE, e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public void resetToDefaults() throws UnknownHostException {
+        configJson.put(JsonValues.PORT.value, defaultsJson.getInt(JsonValues.PORT.value));
+        configJson.put(JsonValues.FONT_SIZE.value, defaultsJson.getInt(JsonValues.FONT_SIZE.value));
+        configJson.put(JsonValues.HIDE_IP.value, defaultsJson.getBoolean(JsonValues.HIDE_IP.value));
+        configJson.put(JsonValues.DARK_MODE.value, defaultsJson.getBoolean(JsonValues.DARK_MODE.value));
+        configJson.put(JsonValues.USERNAME.value, defaultsJson.getString(JsonValues.USERNAME.value));
+        configJson.put(JsonValues.IP_BLACKLIST.value, JSONArrayToStringList(defaultsJson.getJSONArray(JsonValues.IP_BLACKLIST.value)));
+        configJson.put(JsonValues.IP_WHITELIST.value, JSONArrayToStringList(defaultsJson.getJSONArray(JsonValues.IP_WHITELIST.value)));
+        configJson.put(JsonValues.MAC_BLACKLIST.value, JSONArrayToStringList(defaultsJson.getJSONArray(JsonValues.MAC_BLACKLIST.value)));
+        configJson.put(JsonValues.MAC_WHITELIST.value, JSONArrayToStringList(defaultsJson.getJSONArray(JsonValues.MAC_WHITELIST.value)));
+        
+        readConfig();
     }
     
     // region Getters/Setters
