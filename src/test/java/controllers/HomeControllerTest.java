@@ -22,11 +22,9 @@ public class HomeControllerTest extends AbstractTestController<HomeController> {
         helpButton.doClick();
         assert frame.getContentPane().getClass() == HelpController.class;
         
-        JButton themeButton = (JButton) ReflectionUtils.getPrivateInstance(controller, "themeButton");
-        String before = UIManager.getLookAndFeel().getName();
-        themeButton.doClick();
-        String after = UIManager.getLookAndFeel().getName();
-        assert !before.equals(after);
+        JButton settingsButton = (JButton) ReflectionUtils.getPrivateInstance(controller, "settingsButton");
+        settingsButton.doClick();
+        assert frame.getContentPane().getClass() == SettingsController.class;
         
         // TODO: test exit button
     }
