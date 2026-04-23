@@ -21,6 +21,7 @@ import java.util.logging.Level;
  * @see #run()
  */
 public final class App {
+    private static Config config;
     private static User user;
     private static JFrame frame;
     
@@ -40,7 +41,7 @@ public final class App {
      * @throws FileNotFoundException if config file cannot be found
      */
     public static void run() throws IOException {
-        Config config = new Config();
+        config = new Config();
         
         try {
             InetAddress host = InetAddress.getLocalHost();
@@ -146,5 +147,9 @@ public final class App {
     
     public static User getUser() {
         return user;
+    }
+    
+    public static Config getConfig() {
+        return config;
     }
 }
