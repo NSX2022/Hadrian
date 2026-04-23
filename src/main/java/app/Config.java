@@ -1,5 +1,6 @@
 package app;
 
+import models.JsonValues;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.Logging;
@@ -9,18 +10,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 
 /**
- * Class that loads and stores specific JSON values from config.json resource
+ * Class that loads and stores JSON values into config.json configuration file
  */
 public class Config {
-    private final String IP_BLACKLIST = "ipBlacklist", MAC_BLACKLIST = "macBlacklist",
-            IP_WHITELIST = "ipWhitelist", MAC_WHITELIST = "macWhitelist",
-            HIDE_IP = "hideIp", DARK_MODE = "darkMode", USERNAME = "username", PORT = "port", FONT_SIZE = "fontSize";
-    private final JSONObject jsonObject;
+    private final JSONObject configJson, defaultsJson;
+    private final Path configPath;
     
     private int port, fontSize;
     private ArrayList<String> ipBlacklist, macBlacklist, ipWhitelist, macWhitelist;
@@ -54,16 +57,16 @@ public class Config {
      * @see JSONObject#getJSONArray(String)
      */
     public void readConfig() throws UnknownHostException {
-        ipBlacklist = JSONArrayToStringList(jsonObject.getJSONArray(IP_BLACKLIST));
-        macBlacklist = JSONArrayToStringList(jsonObject.getJSONArray(MAC_BLACKLIST));
-        ipWhitelist = JSONArrayToStringList(jsonObject.getJSONArray(IP_WHITELIST));
-        macWhitelist = JSONArrayToStringList(jsonObject.getJSONArray(MAC_WHITELIST));
+        ipBlacklist = JSONArrayToStringList(configJson.getJSONArray(JsonValues.IP_BLACKLIST.value));
+        macBlacklist = JSONArrayToStringList(configJson.getJSONArray(JsonValues.MAC_BLACKLIST.value));
+        ipWhitelist = JSONArrayToStringList(configJson.getJSONArray(JsonValues.IP_WHITELIST.value));
+        macWhitelist = JSONArrayToStringList(configJson.getJSONArray(JsonValues.MAC_WHITELIST.value));
         
-        port = jsonObject.getInt(PORT);
-        fontSize = jsonObject.getInt(FONT_SIZE);
-        hideIp = jsonObject.getBoolean(HIDE_IP);
-        darkMode = jsonObject.getBoolean(DARK_MODE);
-        username = jsonObject.getString(USERNAME);
+        port = configJson.getInt(JsonValues.PORT.value);
+        fontSize = configJson.getInt(JsonValues.FONT_SIZE.value);
+        hideIp = configJson.getBoolean(JsonValues.HIDE_IP.value);
+        darkMode = configJson.getBoolean(JsonValues.DARK_MODE.value);
+        username = configJson.getString(JsonValues.USERNAME.value);
         
         if (username.isBlank()) {
             username = InetAddress.getLocalHost().getHostName();
@@ -96,7 +99,7 @@ public class Config {
     
     public void setPort(int port) {
         this.port = port;
-        jsonObject.put(PORT, port);
+        configJson.put(JsonValues.PORT.value, port);
     }
     
     public int getFontSize() {
@@ -105,7 +108,7 @@ public class Config {
     
     public void setFontSize(int fontSize) {
         this.fontSize = fontSize;
-        jsonObject.put(FONT_SIZE, fontSize);
+        configJson.put(JsonValues.FONT_SIZE.value, fontSize);
     }
     
     public boolean getHideIp() {
@@ -114,7 +117,7 @@ public class Config {
     
     public void setHideIp(boolean hideIp) {
         this.hideIp = hideIp;
-        jsonObject.put(HIDE_IP, hideIp);
+        configJson.put(JsonValues.HIDE_IP.value, hideIp);
     }
     
     public boolean isDarkMode() {
@@ -123,7 +126,7 @@ public class Config {
     
     public void setDarkMode(boolean darkMode) {
         this.darkMode = darkMode;
-        jsonObject.put(DARK_MODE, darkMode);
+        configJson.put(JsonValues.DARK_MODE.value, darkMode);
     }
     
     public String getUsername() {
@@ -132,7 +135,7 @@ public class Config {
     
     public void setUsername(String username) {
         this.username = username;
-        jsonObject.put(USERNAME, username);
+        configJson.put(JsonValues.USERNAME.value, username);
     }
     
     public ArrayList<String> getIpBlacklist() {
@@ -141,12 +144,12 @@ public class Config {
     
     public void addIpBlackList(String ipAddress) {
         ipBlacklist.add(ipAddress);
-        jsonObject.append(IP_BLACKLIST, ipAddress);
+        configJson.append(JsonValues.IP_BLACKLIST.value, ipAddress);
     }
     
     public void setIpBlacklist(ArrayList<String> ipBlacklist) {
         this.ipBlacklist = ipBlacklist;
-        jsonObject.put(IP_BLACKLIST, ipBlacklist);
+        configJson.put(JsonValues.IP_BLACKLIST.value, ipBlacklist);
     }
     
     public ArrayList<String> getMacBlacklist() {
@@ -155,12 +158,12 @@ public class Config {
     
     public void addMacBlackList(String macAddress) {
         macBlacklist.add(macAddress);
-        jsonObject.append(MAC_BLACKLIST, macAddress);
+        configJson.append(JsonValues.MAC_BLACKLIST.value, macAddress);
     }
     
     public void setMacBlacklist(ArrayList<String> macBlacklist) {
         this.macBlacklist = macBlacklist;
-        jsonObject.put(MAC_BLACKLIST, macBlacklist);
+        configJson.put(JsonValues.MAC_BLACKLIST.value, macBlacklist);
     }
     
     public ArrayList<String> getIpWhitelist() {
@@ -169,12 +172,12 @@ public class Config {
     
     public void addIpWhiteList(String ipAddress) {
         ipWhitelist.add(ipAddress);
-        jsonObject.append(IP_WHITELIST, ipAddress);
+        configJson.append(JsonValues.IP_WHITELIST.value, ipAddress);
     }
     
     public void setIpWhitelist(ArrayList<String> ipWhitelist) {
         this.ipWhitelist = ipWhitelist;
-        jsonObject.put(IP_WHITELIST, ipWhitelist);
+        configJson.put(JsonValues.IP_WHITELIST.value, ipWhitelist);
     }
     
     public ArrayList<String> getMacWhitelist() {
@@ -183,12 +186,12 @@ public class Config {
     
     public void addMacWhiteList(String macAddress) {
         macWhitelist.add(macAddress);
-        jsonObject.append(MAC_WHITELIST, macAddress);
+        configJson.append(JsonValues.MAC_WHITELIST.value, macAddress);
     }
     
     public void setMacWhitelist(ArrayList<String> macWhitelist) {
         this.macWhitelist = macWhitelist;
-        jsonObject.put(MAC_WHITELIST, macWhitelist);
+        configJson.put(JsonValues.MAC_WHITELIST.value, macWhitelist);
     }
     // endregion
 }
