@@ -67,6 +67,7 @@ class AppTest extends AbstractTest {
     
     @Test
     void setDarkMode() throws NoSuchFieldException, NoSuchMethodException, IOException {
+        ReflectionUtils.setPrivateStatic(App.class, "config", new Config());
         ReflectionUtils.invokePrivateStatic(App.class, "initJFrame", new Class[0]);
         ReflectionUtils.setPrivateStatic(App.class, "frame", frame);
         
