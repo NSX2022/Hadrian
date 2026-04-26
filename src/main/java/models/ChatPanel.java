@@ -2,10 +2,14 @@ package models;
 
 import app.App;
 import controllers.ChatController;
+import utils.Logging;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashSet;
+import java.util.logging.Level;
 
 /**
  * A class representing a singular chat panel object.
@@ -72,7 +76,19 @@ public final class ChatPanel extends JPanel {
         membersArray = members.toArray(membersArray);
         
         for (int i = 0; i < membersArray.length; i++) {
-            membersString.append(membersArray[i]);
+            String member = membersArray[i], hostName = "unknown";
+            
+            if (App.getConfig().getHideIp()) {
+                try {
+                    hostName = InetAddress.getByName(member).getHostName();
+                } catch (UnknownHostException e) {
+                    Logging.log("Failed To Retrieve Host Name", Level.WARNING, e);
+                }
+            } else {
+                hostName = membersArray[i];
+            }
+            
+            membersString.append(hostName);
             
             if (i != membersArray.length - 1)
                 membersString.append(", ");

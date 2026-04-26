@@ -66,7 +66,10 @@ public class ChatController extends AbstractController implements Loadable {
             } catch (UnknownHostException e) {
                 Logging.log("Failed To Retrieve Host Name", Level.WARNING, e);
             } finally {
-                memberModel.addElement(hostName + " [" + member + "]");
+                if (App.getConfig().getHideIp())
+                    memberModel.addElement(hostName);
+                else
+                    memberModel.addElement(hostName + " [" + member + "]");
             }
         }
         
