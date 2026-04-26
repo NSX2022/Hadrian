@@ -44,8 +44,7 @@ public final class App {
         config = new Config();
         
         try {
-            InetAddress host = InetAddress.getLocalHost();
-            user = new User(host.getHostAddress(), config.getUsername());
+            user = new User(InetAddress.getLocalHost().getHostAddress(), config.getUsername());
         } catch (UnknownHostException e) {
             Logging.log("Failed To Get User IP Address", Level.SEVERE, e);
             throw new RuntimeException(e);
@@ -151,5 +150,9 @@ public final class App {
     
     public static Config getConfig() {
         return config;
+    }
+    
+    public static void setUser(User user) {
+        App.user = user;
     }
 }

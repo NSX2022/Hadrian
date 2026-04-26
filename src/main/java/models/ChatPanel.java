@@ -80,7 +80,8 @@ public final class ChatPanel extends JPanel {
             
             if (App.getConfig().getHideIp()) {
                 try {
-                    hostName = InetAddress.getByName(member).getHostName();
+                    InetAddress host = InetAddress.getByName(member);
+                    hostName = host.getHostAddress().equals(App.getUser().getIp()) ? App.getUser().getUsername() : host.getHostName();
                 } catch (UnknownHostException e) {
                     Logging.log("Failed To Retrieve Host Name", Level.WARNING, e);
                 }

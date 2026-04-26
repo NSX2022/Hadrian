@@ -3,14 +3,18 @@ package controllers;
 import app.App;
 import app.Config;
 import models.Screens;
+import models.User;
+import utils.Logging;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class SettingsController extends AbstractController {
     private final int UNSIGNED_16_BIT_CONSTANT = ~0 >>> 16, // 65,535
@@ -106,6 +110,12 @@ public class SettingsController extends AbstractController {
             }
             
             config.setUsername(usernameField.getText());
+            try {
+                App.setUser(new User(InetAddress.getLocalHost().getHostAddress(), usernameField.getText()));
+            } catch (UnknownHostException ex) {
+                Logging.log("Failed To Get User IP Address", Level.SEVERE, ex);
+                throw new RuntimeException(ex);
+            }
             
             String splitRegex = ",\\s*";
             

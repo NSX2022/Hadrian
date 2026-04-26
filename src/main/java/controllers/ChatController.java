@@ -62,7 +62,8 @@ public class ChatController extends AbstractController implements Loadable {
             String hostName = "unknown";
             
             try {
-                hostName = InetAddress.getByName(member).getHostName();
+                InetAddress host = InetAddress.getByName(member);
+                hostName = host.getHostAddress().equals(user.getIp()) ? user.getUsername() : host.getHostName();
             } catch (UnknownHostException e) {
                 Logging.log("Failed To Retrieve Host Name", Level.WARNING, e);
             } finally {
