@@ -27,8 +27,8 @@ Please read all instructions and have an understanding of commands before execut
 possible damage.
 
 ## Showcase
-display all images here with descriptions
-<img src="images/image.png">
-<p align="center">
-	description text here
-</p>
+
+| <img src="images/home.png" alt="Hadrian Home Screen Image">      | <img src="images/chats.png" alt="Hadrian Chats View Image">  |
+|------------------------------------------------------------------|--------------------------------------------------------------|
+| <img src="images/chat.png" alt="Hadrian Chat Interaction Image"> | <img src="images/settings.png" alt="Hadrian Settings Image"> |
+| <img src="images/help.png" alt="Hadrian Help Screen Image">      |                                                              |
