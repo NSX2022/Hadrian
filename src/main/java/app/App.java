@@ -1,8 +1,10 @@
 package app;
 
+import static app.Serialization.deserialize;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import controllers.*;
+import models.Chat;
 import models.Screens;
 import models.User;
 import utils.Logging;
@@ -11,8 +13,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Level;
 
 /**
@@ -43,14 +48,33 @@ public final class App {
     public static void run() throws IOException {
         config = new Config();
         
+        user = loadSavedUserData();
+        
+        frame = initJFrame();
+    }
+    
+    private static User loadSavedUserData() {
         try {
-            user = new User(InetAddress.getLocalHost().getHostAddress(), config.getUsername());
+            HashSet<? extends Serializable> data = deserialize();
+            String hostAddress = InetAddress.getLocalHost().getHostAddress();
+            String username = config.getUsername();
+            
+            if (data.isEmpty())
+                return new User(hostAddress, username);
+            
+            ArrayList<Chat> chats = new ArrayList<>();
+            for (Serializable d : data) {
+                if (d instanceof Chat chat) {
+                    chats.add(chat);
+                }
+                // more serializable logic here
+            }
+            
+            return new User(hostAddress, username, chats);
         } catch (UnknownHostException e) {
             Logging.log("Failed To Get User IP Address", Level.SEVERE, e);
             throw new RuntimeException(e);
         }
-        
-        frame = initJFrame();
     }
     
     /**
