@@ -1,6 +1,7 @@
 package controllers;
 
 import app.App;
+import static app.Serialization.serialize;
 import models.Chat;
 import models.ChatPanel;
 import models.Screens;
@@ -100,6 +101,7 @@ public class ChatsController extends AbstractController implements Loadable {
         App.draw();
         
         displayNotif("Created New Chat With Members: " + usersField.getText());
+        serialize(chat, chat.getLastMessage().text());
     }
     
     /**

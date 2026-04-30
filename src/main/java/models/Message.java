@@ -1,5 +1,6 @@
 package models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  */
 public record Message(String text,
                       User sender,
-                      Date date) {
+                      Date date) implements Serializable {
     /**
      * Creating a message object without a date.
      * <p>

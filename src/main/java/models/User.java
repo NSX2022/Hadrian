@@ -1,5 +1,8 @@
 package models;
 
+import static app.Serialization.serialize;
+
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,7 +11,7 @@ import java.util.List;
 /**
  * Dataclass representing a singular user in the Hadrian application.
  */
-public class User {
+public class User implements Serializable {
     private final ArrayList<Chat> chats;
     private String ip, username;
     
@@ -58,6 +61,8 @@ public class User {
         tutorial.addMessage("Nothing you send here leaves your computer.", tutorialBot);
         tutorial.addMessage("You can type anything and press [Enter] to send it.", tutorialBot);
         tutorial.addMessage("Try sending me a message.", tutorialBot);
+        
+        serialize(tutorial, tutorial.getMessages().getFirst().text());
     }
     
     // region Getters/Setters

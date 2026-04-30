@@ -1,12 +1,13 @@
 package models;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
  * Dataclass representing a singular chat in the Hadrian application.
  */
-public class Chat {
+public class Chat implements Serializable {
     private final HashSet<String> users;
     private final LinkedList<Message> messages;
     

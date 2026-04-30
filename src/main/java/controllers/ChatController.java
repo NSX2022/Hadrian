@@ -1,6 +1,7 @@
 package controllers;
 
 import app.App;
+import static app.Serialization.serialize;
 import models.*;
 import utils.Logging;
 
@@ -108,6 +109,7 @@ public class ChatController extends AbstractController implements Loadable {
         App.draw();
         
         scrollToBottom();
+        serialize(data, data.getMessages().getFirst().text());
     }
     
     /**
