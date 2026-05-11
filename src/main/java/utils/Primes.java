@@ -29,12 +29,12 @@ public class Primes {
 
         // Certainty = how many rounds of the approximate prime test.
         // Less that 2 * (1/2^certainty) chance that the number isn't prime
-        while (!toRet[0].isProbablePrime(256))
+        while (!toRet[0].isProbablePrime(Constants.HIGH_CERTAINTY.ordinal()))
             toRet[0] = new BigInteger(digitMax.bitLength(), secRand)
                     .mod(digitMax.subtract(digitMin))
                     .add(digitMin);
 
-        while (!toRet[1].isProbablePrime(256))
+        while (!toRet[1].isProbablePrime(Constants.HIGH_CERTAINTY.ordinal()))
             toRet[1] = new BigInteger(digitMax.bitLength(), secRand)
                     .mod(digitMax.subtract(digitMin))
                     .add(digitMin);
@@ -61,12 +61,12 @@ public class Primes {
 
         // MULTIPLE OCCURRENCES ARE INTENTIONAL HERE
         while (!toRet[0].multiply(toRet[1]).equals(pubNum)) {
-            while (!toRet[0].isProbablePrime(256))
+            while (!toRet[0].isProbablePrime(Constants.HIGH_CERTAINTY.ordinal()))
                 toRet[0] = new BigInteger(digitMax.bitLength(), secRand)
                         .mod(digitMax.subtract(digitMin))
                         .add(digitMin);
 
-            while (!toRet[1].isProbablePrime(256))
+            while (!toRet[1].isProbablePrime(Constants.HIGH_CERTAINTY.ordinal()))
                 toRet[1] = new BigInteger(digitMax.bitLength(), secRand)
                         .mod(digitMax.subtract(digitMin))
                         .add(digitMin);

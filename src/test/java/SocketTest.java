@@ -1,7 +1,3 @@
-// Source - https://stackoverflow.com/a/40058144
-// Posted by user3841581
-// Retrieved 2026-02-05, License - CC BY-SA 3.0
-
 import app.Config;
 import network.Receiver;
 import network.Sender;
@@ -13,6 +9,7 @@ import java.util.Scanner;
 
 public class SocketTest {
     private static Config conf;
+
     public static void main(String[] args) throws FileNotFoundException, UnknownHostException {
         try {
             conf = new Config();
@@ -20,27 +17,43 @@ public class SocketTest {
             System.out.println(SocketTest.class.getProtectionDomain().getCodeSource().getLocation());
             throw new RuntimeException(e);
         }
-        
+
         Receiver receiver = new Receiver(conf);
         Sender sender = new Sender(conf);
-        
+
         receiver.setOpen(true);
         receiver.startServer();
-        
-        InetAddress toSend;
+
         Scanner input = new Scanner(System.in);
+
+        // Ask for the peer IP at startup instead of hardcoding it.
+        // Run `ip addr` (Linux/macOS) or `ipconfig` (Windows) on the peer machine to find it.
+        System.out.print("Enter peer IP address: ");
+        InetAddress toSend;
         try {
-            //add peer's IP from running ip addr. Google DNS server is an example IP
-            toSend = InetAddress.getByName("8.8.8.8");
+            toSend = InetAddress.getByName(input.nextLine().trim());
         } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
+            System.out.println("Invalid IP address.");
+            receiver.stopServer();
+            return;
         }
-        
+
+        System.out.println("Sending as: " + conf.getUsername());
+        System.out.println("Listening on port: " + conf.getPort());
+        System.out.println("Sending to: " + toSend.getHostAddress());
+        System.out.println("Type a message and press Enter to send. Ctrl+C to quit.\n");
+
         while (input.hasNextLine()) {
-            System.out.print("\n>");
-            sender.sendMessage(input.nextLine(), toSend);
+            System.out.print("\n> ");
+            String message = input.nextLine();
+            if (message.isBlank()) continue;
+
+            boolean sent = sender.sendMessage(message, toSend);
+            if (!sent) {
+                System.out.println("[!] Failed to send message — check that the peer is reachable and listening.");
+            }
         }
-        
+
         receiver.stopServer();
     }
 }

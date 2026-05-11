@@ -116,7 +116,7 @@ public class NetworkUtils {
                         new BigInteger("10001", 16), // publicExponent
                         SecureRandom.getInstance("DRBG"),
                         4096, // strength
-                        255 // certainty, change to 100 if too slow
+                        Constants.HIGH_CERTAINTY.ordinal() // certainty, change to MEDIUM_CERTAINTY if too slow
                 ));
 
         return generator.generateKeyPair();
@@ -179,7 +179,6 @@ public class NetworkUtils {
         // SHA-256 hashes
         byte[] hash = new byte[32];
         buffer.get(hash);
-
         byte[] previousHash = new byte[32];
         buffer.get(previousHash);
 
