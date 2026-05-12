@@ -7,6 +7,13 @@ public enum Constants {
 
     ;
 
-    Constants(int i) {
+    private final int value;
+
+    Constants(int value) {
+        this.value = value;    // store it
+    }
+
+    public int value() {       // expose it
+        return value;
     }
 }

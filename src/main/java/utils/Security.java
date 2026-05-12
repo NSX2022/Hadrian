@@ -24,16 +24,4 @@ public class Security {
 
     }
 
-    //TODO: RSA encryption (Use bouncycastle?)
-    /*
-    public byte[] decrypt(byte[] input, ..., ...){
-
-    }
-
-    public byte[] encrypt(byte[] input, ..., ...){
-
-    }
-    */
-
-
 }

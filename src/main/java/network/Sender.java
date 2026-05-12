@@ -21,7 +21,7 @@ import java.util.logging.Level;
  *   <li>Send a handshake XML (sender_template.xml, no roots/message)</li>
  *   <li>Receive a challenge XML from the receiver containing a large semiprime (PUBNUM)</li>
  *   <li>Factor PUBNUM into its two prime roots and send them back</li>
- *   <li>Wait for an ACK confirming the roots are correct</li>
+ *   <li>Wait for an SHAKE confirming the roots are correct</li>
  *   <li>Split the message into hash-chained UDP packets and send them</li>
  * </ol>
  *
@@ -32,8 +32,8 @@ public class Sender {
     /** Milliseconds to wait for a response from the receiver before giving up. */
     private static final int SOCKET_TIMEOUT_MS = 15_000;
 
-    /** ACK string the receiver sends after verifying the prime roots. */
-    static final String ACK = "ACK";
+    /** SHAKE string the receiver sends after verifying the prime roots. */
+    static final String SHAKE = "SHAKE";
 
     /**
      * Overhead (bytes) added by {@link NetworkUtils#packetFactory} to every packet:
@@ -69,7 +69,7 @@ public class Sender {
             NetworkUtils.GetTimestamp("[Sender] Handshake sent to " + ip + " at ");
 
             // ── Phase 2: Receive PUBNUM challenge ───────────────────────────
-            byte[] buf = new byte[Constants.MAX_PACKET_BYTES.ordinal()];
+            byte[] buf = new byte[Constants.MAX_PACKET_BYTES.value()];
             DatagramPacket response = new DatagramPacket(buf, buf.length);
             socket.receive(response);
 
@@ -91,14 +91,14 @@ public class Sender {
             sendRaw(socket, rootsXml.getBytes(StandardCharsets.UTF_8), ip);
             NetworkUtils.GetTimestamp("[Sender] Prime roots sent at ");
 
-            // ── Phase 4: Wait for ACK ───────────────────────────────────────
+            // ── Phase 4: Wait for SHAKE ───────────────────────────────────────
             socket.receive(response);
-            String ack = new String(response.getData(), 0, response.getLength(), StandardCharsets.UTF_8).trim();
-            if (!ACK.equals(ack)) {
+            String shake = new String(response.getData(), 0, response.getLength(), StandardCharsets.UTF_8).trim();
+            if (!SHAKE.equals(shake)) {
                 Logging.log("Authentication rejected by receiver (incorrect roots)", Level.WARNING);
                 return false;
             }
-            NetworkUtils.GetTimestamp("[Sender] ACK received at ");
+            NetworkUtils.GetTimestamp("[Sender] SHAKE received at ");
 
             // ── Phase 5: Send hash-chained message packets ──────────────────
             sendPacketChain(socket, userMessage, ip);
@@ -107,9 +107,11 @@ public class Sender {
 
         } catch (SocketTimeoutException e) {
             Logging.log("Timed out waiting for receiver", Level.SEVERE, e);
+            e.printStackTrace();
             return false;
         } catch (Exception e) {
             Logging.log("Failed to send message", Level.SEVERE, e);
+            e.printStackTrace();
             return false;
         }
     }
@@ -126,7 +128,7 @@ public class Sender {
     private void sendPacketChain(DatagramSocket socket, String message, InetAddress ip)
             throws IOException, NoSuchAlgorithmException {
 
-        int maxContentBytes = Constants.MAX_PACKET_BYTES.ordinal() - PACKET_HEADER_BYTES;
+        int maxContentBytes = Constants.MAX_PACKET_BYTES.value() - PACKET_HEADER_BYTES;
         byte[] msgBytes = message.getBytes(StandardCharsets.UTF_8);
         int totalPackets = (int) Math.ceil((double) msgBytes.length / maxContentBytes);
 
@@ -163,7 +165,7 @@ public class Sender {
      */
     private String buildSenderXml(String root1, String root2, String message,
                                   byte[] hash, byte[] previousHash) throws Exception {
-        String template = loadTemplate("sender_template.xml");
+        String template = loadTemplate("templates/sender_template.xml");
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new ByteArrayInputStream(template.getBytes(StandardCharsets.UTF_8)));

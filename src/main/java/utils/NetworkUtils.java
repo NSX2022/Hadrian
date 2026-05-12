@@ -116,7 +116,7 @@ public class NetworkUtils {
                         new BigInteger("10001", 16), // publicExponent
                         SecureRandom.getInstance("DRBG"),
                         4096, // strength
-                        Constants.HIGH_CERTAINTY.ordinal() // certainty, change to MEDIUM_CERTAINTY if too slow
+                        Constants.HIGH_CERTAINTY.value() // certainty, change to MEDIUM_CERTAINTY if too slow
                 ));
 
         return generator.generateKeyPair();

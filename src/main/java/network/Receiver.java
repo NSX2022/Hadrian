@@ -22,7 +22,7 @@ import java.util.logging.Level;
  *   <li>Receive a handshake XML; validate the sender against config black/whitelists</li>
  *   <li>Generate two large primes, compute their product (PUBNUM), and send it back</li>
  *   <li>Receive ROOT1 and ROOT2 from the sender; verify ROOT1 × ROOT2 == PUBNUM</li>
- *   <li>Send {@link Sender#ACK} to unlock message transmission</li>
+ *   <li>Send {@link Sender#SHAKE} to unlock message transmission</li>
  *   <li>Receive hash-chained packets, verify each hash, and reassemble the message</li>
  * </ol>
  *
@@ -34,7 +34,7 @@ import java.util.logging.Level;
 public class Receiver {
 
     /** Number of digits in each prime used to build PUBNUM. */
-    private static final int PRIME_DIGITS = 5;
+    private static final int PRIME_DIGITS = 6;
 
     // ── Session bookkeeping ──────────────────────────────────────────────────
 
@@ -42,7 +42,7 @@ public class Receiver {
     private enum SessionState {
         /** PUBNUM sent; waiting for the sender to return its prime roots. */
         AWAITING_ROOTS,
-        /** Roots verified and ACK sent; waiting for binary message packets. */
+        /** Roots verified and SHAKE sent; waiting for binary message packets. */
         AWAITING_PACKETS
     }
 
@@ -71,9 +71,7 @@ public class Receiver {
         }
     }
 
-    // ────────────────────────────────────────────────────────────────────────
-
-    private boolean open = false;
+    private volatile boolean open = false;
     private Config conf;
     private Thread serverThread;
 
@@ -109,14 +107,17 @@ public class Receiver {
                 throw new RuntimeException(e);
             }
 
-            byte[] buf = new byte[Constants.MAX_PACKET_BYTES.ordinal()];
+            byte[] buf = new byte[Constants.MAX_PACKET_BYTES.value()];
 
             while (!serverThread.isInterrupted()) {
-                if (!this.open) continue;
-
                 try {
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                    socket.receive(packet);
+                    socket.receive(packet); // Blocks safely here until data actually arrives
+
+                    // If the receiver is toggled off, discard incoming packets
+                    if (!this.open) {
+                        continue;
+                    }
 
                     String senderIp   = packet.getAddress().getHostAddress();
                     int    senderPort = packet.getPort();
@@ -129,6 +130,12 @@ public class Receiver {
                         handleBinaryPacket(data, senderIp);
                     }
 
+                } catch (SocketException e) {
+                    // Handle socket closure gracefully when thread is interrupted
+                    if (serverThread.isInterrupted()) {
+                        break;
+                    }
+                    Logging.log("Socket exception", Level.SEVERE, e);
                 } catch (Exception e) {
                     Logging.log("Error processing received datagram", Level.SEVERE, e);
                 }
@@ -159,7 +166,7 @@ public class Receiver {
      *
      * <ul>
      *   <li>No active session for this IP → Phase 1/2 (validate + send PUBNUM)</li>
-     *   <li>Session in {@link SessionState#AWAITING_ROOTS} → Phase 3/4 (verify roots + ACK)</li>
+     *   <li>Session in {@link SessionState#AWAITING_ROOTS} → Phase 3/4 (verify roots + SHAKE)</li>
      * </ul>
      */
     private void handleXmlMessage(DatagramSocket socket, byte[] data,
@@ -175,7 +182,7 @@ public class Receiver {
             } else {
                 ReceiverSession session = sessions.get(senderIp);
                 if (session.state == SessionState.AWAITING_ROOTS) {
-                    // ── Phase 3 → 4: Verify roots and send ACK ────────────────
+                    // ── Phase 3 → 4: Verify roots and send SHAKE ────────────────
                     handleRootsVerification(socket, doc, session, senderIp, senderPort, senderAddress);
                 }
                 // Any XML arriving during AWAITING_PACKETS is ignored
@@ -233,7 +240,7 @@ public class Receiver {
 
     /**
      * Phase 3 → 4: Checks that ROOT1 × ROOT2 equals this session's PUBNUM.
-     * Sends {@link Sender#ACK} on success, or removes the session on failure.
+     * Sends {@link Sender#SHAKE} on success, or removes the session on failure.
      */
     private void handleRootsVerification(DatagramSocket socket, Document doc,
                                          ReceiverSession session,
@@ -258,10 +265,10 @@ public class Receiver {
             return;
         }
 
-        // Roots are correct → advance session and send ACK
+        // Roots are correct → advance session and send SHAKE
         session.state = SessionState.AWAITING_PACKETS;
-        sendTo(socket, Sender.ACK.getBytes(StandardCharsets.UTF_8), senderAddress, senderPort);
-        NetworkUtils.GetTimestamp("[Receiver] ACK sent to " + senderIp + " at ");
+        sendTo(socket, Sender.SHAKE.getBytes(StandardCharsets.UTF_8), senderAddress, senderPort);
+        NetworkUtils.GetTimestamp("[Receiver] SHAKE sent to " + senderIp + " at ");
     }
 
     /**
@@ -356,7 +363,7 @@ public class Receiver {
     private String buildReceiverXml(BigInteger pubNum,
                                     byte[] hash,
                                     byte[] previousHash) throws Exception {
-        String template = loadTemplate("reciever_template.xml");
+        String template = loadTemplate("templates/reciever_template.xml");
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(
