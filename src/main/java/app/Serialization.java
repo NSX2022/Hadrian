@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.logging.Level;
 
-public class Serialization {
+public final class Serialization {
     private static File getConfigDir() {
         String os = System.getProperty("os.name").toLowerCase(),
                 home = System.getProperty("user.home");

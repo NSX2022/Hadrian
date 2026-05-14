@@ -21,7 +21,7 @@ import java.util.logging.Level;
 /**
  * Class that loads and stores JSON values into config.json configuration file
  */
-public class Config {
+public final class Config {
     private final JSONObject configJson, defaultsJson;
     private final Path configPath;
     
